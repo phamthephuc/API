@@ -1,0 +1,58 @@
+package com.controller;
+
+import com.dto.APIResponseDTO;
+import com.entity.Location;
+import com.entity.PlaceCategory;
+import com.service.LocationService;
+import com.service.PlaceCategoryService;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
+@RestController
+
+public class LocationController {
+    @Autowired
+    LocationService locationService;
+
+    @GetMapping(value = "/locations")
+    @ApiResponses(value = {//
+            @ApiResponse(code = 400, message = "Something went wrong"), //
+            @ApiResponse(code = 403, message = "Access denied"), //
+            @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
+    public APIResponseDTO findAll(){
+        return  new APIResponseDTO(200,"Success!",locationService.findAllLocation());
+    }
+
+    @GetMapping(value = "/location/{id}")
+    public  APIResponseDTO getLocation( @PathVariable Long id){
+        return  new APIResponseDTO(200,"Success!",locationService.findById(id));
+    }
+
+    @PostMapping(value = "/location")
+    public APIResponseDTO  createLocation(@RequestBody Location location){
+        locationService.createLocation(location);
+        return  new APIResponseDTO(201,"Created!",location);
+    }
+
+    @PutMapping(value = "/location/{id}")
+    public ResponseEntity<Object> editLocation(@RequestBody Location location, @PathVariable Long id){
+        Optional<Location> locationOld = locationService.findById(id);
+        if (!locationOld.isPresent()) return ResponseEntity.notFound().build();
+        location.setId(id);
+        locationService.updateLocation(location);
+        return ResponseEntity.noContent().build();
+
+    }
+
+    @DeleteMapping(value = "/location/{id}")
+    public APIResponseDTO deleteLocation(@PathVariable long id) {
+        locationService.deleteLocation(id);
+        return  new APIResponseDTO(200,"Deleted!", null);
+
+    }
+}
