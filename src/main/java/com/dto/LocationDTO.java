@@ -4,6 +4,7 @@ import com.entity.*;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 
@@ -17,8 +18,9 @@ public class LocationDTO {
     Status  status;
     Address address;
     Contact contact;
-    User user;
+    Users users;
     Duration duration;
+    List<Picture> pictureList;
 
 
 }

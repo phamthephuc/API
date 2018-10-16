@@ -24,4 +24,5 @@ public class Location {
     Long idContact;
     Long idUser;
     Long idDuration;
+
 }
