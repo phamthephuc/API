@@ -40,64 +40,67 @@ public class LocationService {
     @Autowired
     UsersRepository usersRepository;
 
-    @Autowired
-    ModelMapper  modelMapper;
+//    @Autowired
+//    ModelMapper  modelMapper;
 
+//
+//    public List<LocationDTO> findAllLocation(){
+//        ArrayList<LocationDTO> listLocationDTO = new ArrayList<>();
+//        ArrayList<Location> listLocations = (ArrayList<Location>) locationRepository.findAll();
+//        for(Location location: listLocations){
+//            LocationDTO locationDTO = new LocationDTO();
+//            locationDTO = modelMapper.map(location,LocationDTO.class);
+//
+//            //placeCatrgory
+//            PlaceCategory placeCategory;
+//            placeCategory = placeCategoryRepository.findById(location.getIdPlaceCategory()).orElse(new PlaceCategory());
+//            locationDTO.setPlaceCategory(placeCategory);
+//
+//            //Content
+//            Content content;
+//            content = contentRepository.findById(location.getIdContent()).orElse(new Content());
+//            locationDTO.setContent(content);
+//
+//            //Status
+//            Status status;
+//            status = statusRepository.findById(location.getIdStatus()).orElse(new Status());
+//            locationDTO.setStatus(status);
+//
+//            //Address
+//            Address address;
+//            address = addressRepository.findById(location.getIdAddress()).orElse(new Address());
+//            locationDTO.setAddress(address);
+//
+//            //Contact
+//            Contact contact;
+//            contact = contactRepository.findById(location.getIdContact()).orElse(new Contact());
+//            locationDTO.setContact(contact);
+//
+//            //User
+//            Users users;
+//            users = usersRepository.findById(location.getIdUser()).orElse(new Users());
+//            locationDTO.setUsers(users);
+//
+//            //duration
+//            Duration duration;
+//            duration = durationRepository.findById(location.getIdDuration()).orElse(new Duration());
+//            locationDTO.setDuration(duration);
+//
+//            Picture picture = pictureRepository.findById(location.getIdDuration()).orElse(new Picture());
+//
+//
+//
+//
+//
+//
+//
+//        }
+//        return  listLocationDTO;
+//    }
 
-    public List<LocationDTO> findAllLocation(){
-        ArrayList<LocationDTO> listLocationDTO = new ArrayList<>();
-        ArrayList<Location> listLocations = (ArrayList<Location>) locationRepository.findAll();
-        for(Location location: listLocations){
-            LocationDTO locationDTO = new LocationDTO();
-            locationDTO = modelMapper.map(location,LocationDTO.class);
-
-            //placeCatrgory
-            PlaceCategory placeCategory;
-            placeCategory = placeCategoryRepository.findById(location.getIdPlaceCategory()).orElse(new PlaceCategory());
-            locationDTO.setPlaceCategory(placeCategory);
-
-            //Content
-            Content content;
-            content = contentRepository.findById(location.getIdContent()).orElse(new Content());
-            locationDTO.setContent(content);
-
-            //Status
-            Status status;
-            status = statusRepository.findById(location.getIdStatus()).orElse(new Status());
-            locationDTO.setStatus(status);
-
-            //Address
-            Address address;
-            address = addressRepository.findById(location.getIdAddress()).orElse(new Address());
-            locationDTO.setAddress(address);
-
-            //Contact
-            Contact contact;
-            contact = contactRepository.findById(location.getIdContact()).orElse(new Contact());
-            locationDTO.setContact(contact);
-
-            //User
-            Users users;
-            users = usersRepository.findById(location.getIdUser()).orElse(new Users());
-            locationDTO.setUsers(users);
-
-            //duration
-            Duration duration;
-            duration = durationRepository.findById(location.getIdDuration()).orElse(new Duration());
-            locationDTO.setDuration(duration);
-
-            List<Picture> listPicture = pictureRepository.findById()
-
-
-
-
-
-
-
-        }
-        return  listLocationDTO;
+    public List<Location> findAllLocation(){
+        return (List<Location>) locationRepository.findAll();
     }
-
     public Optional<Location> findById(Long id){
         return locationRepository.findById(id);
     }
