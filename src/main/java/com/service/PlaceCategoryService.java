@@ -18,6 +18,10 @@ public class PlaceCategoryService {
         return (List<PlaceCategory>) placeCategoryRepository.findAll();
     }
 
+    public List<PlaceCategory> findAllPlaceCategoryOfOneType(Long id){
+        return placeCategoryRepository.findByIdPlaceType(id);
+    }
+
     public Optional<PlaceCategory> findById(Long id){
         return placeCategoryRepository.findById(id);
     }

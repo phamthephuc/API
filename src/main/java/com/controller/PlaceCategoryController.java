@@ -28,8 +28,13 @@ public class PlaceCategoryController {
         return  new APIResponseDTO(200,"Success!",placeCategoryService.findAllPlaceCategory());
     }
 
+    @GetMapping(value = "/placecategory-of-placeType/{id}")
+    public  APIResponseDTO findAllPlaceCategoryOfOneType(@PathVariable Long id){
+        return  new APIResponseDTO(200,"Success", placeCategoryService.findAllPlaceCategoryOfOneType(id));
+    }
+
     @GetMapping(value = "/placecategory/{id}")
-    public  APIResponseDTO getPlaceType( @PathVariable Long id){
+    public  APIResponseDTO getPlaceCategory( @PathVariable Long id){
         return  new APIResponseDTO(200,"Success!",placeCategoryService.findById(id));
     }
 
@@ -40,7 +45,7 @@ public class PlaceCategoryController {
     }
 
     @PutMapping(value = "/placecategory/{id}")
-    public ResponseEntity<Object> editPlaceType(@RequestBody PlaceCategory placeCategory, @PathVariable Long id){
+    public ResponseEntity<Object> editPlaceCategory(@RequestBody PlaceCategory placeCategory, @PathVariable Long id){
         Optional<PlaceCategory> placeCategory1 = placeCategoryService.findById(id);
         if (!placeCategory1.isPresent()) return ResponseEntity.notFound().build();
         placeCategory.setId(id);
@@ -50,7 +55,7 @@ public class PlaceCategoryController {
     }
 
     @DeleteMapping(value = "/placeCategorys/{id}")
-    public APIResponseDTO deleteStudent(@PathVariable long id) {
+    public APIResponseDTO deletePlaceCategory(@PathVariable long id) {
         placeCategoryService.deletePlaceCategory(id);
         return  new APIResponseDTO(200,"Deleted!", null);
 
