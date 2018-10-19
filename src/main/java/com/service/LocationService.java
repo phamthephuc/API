@@ -1,6 +1,7 @@
 package com.service;
 
 import com.dto.LocationDTO;
+import com.dto.LocationProfileDTO;
 import com.entity.*;
 import com.repository.*;
 import org.modelmapper.ModelMapper;
@@ -97,6 +98,94 @@ public class LocationService {
 //        }
 //        return  listLocationDTO;
 //    }
+
+    public  List<LocationDTO> findAllLocationByCategoryId(Long id){
+        List<Location> listLocation = locationRepository.findByIdPlaceCategory(id);
+        List<LocationDTO> listLocationDTO = new ArrayList<>();
+        for (Location location : listLocation){
+            LocationDTO locationDTO = new LocationDTO();
+            locationDTO.setId(location.getId());
+            locationDTO.setName(location.getName());
+            locationDTO.setIntroduction(location.getIntroduction());
+            locationDTO.setCreatedDate(location.getCreatedDate());
+
+//            PlaceCategory placeCategory;
+            PlaceCategory placeCategory = placeCategoryRepository.findById(location.getIdPlaceCategory()).orElse(new PlaceCategory());
+//            Content content;
+            Content content = contentRepository.findById(location.getIdContent()).orElse(new Content());
+//            Status  status;
+            Status status = statusRepository.findById(location.getIdStatus()).orElse(new Status());
+//            Address address;
+            Address address = addressRepository.findById(location.getIdAddress()).orElse(new Address());
+//            Contact contact;
+            Contact contact = contactRepository.findById(location.getIdContact()).orElse(new Contact());
+//            Users users;
+            Users users = usersRepository.findById(location.getIdUser()).orElse(new Users());
+//            Duration duration;
+            Duration duration = durationRepository.findById(location.getIdDuration()).orElse(new Duration());
+
+//            List<Picture> pictureList;
+            ArrayList<Picture> pictures = pictureRepository.findByIdLocation(location.getId());
+
+            locationDTO.setPlaceCategory(placeCategory);
+            locationDTO.setContent(content);
+            locationDTO.setContact(contact);
+            locationDTO.setStatus(status);
+            locationDTO.setAddress(address);
+            locationDTO.setDuration(duration);
+            locationDTO.setPictureList(pictures);
+            listLocationDTO.add(locationDTO);
+        }
+        return  listLocationDTO;
+
+    }
+
+    public  List<LocationProfileDTO> findAllLocationProfileByCategoryId(Long id){
+        List<Location> listLocation = locationRepository.findByIdPlaceCategory(id);
+        List<LocationProfileDTO> listLocationDTO = new ArrayList<>();
+        for (Location location : listLocation){
+            LocationProfileDTO locationProfileDTO = new LocationProfileDTO();
+            locationProfileDTO.setId(location.getId());
+            locationProfileDTO.setName(location.getName());
+            locationProfileDTO.setIntroduction(location.getIntroduction());
+            locationProfileDTO.setCreatedDate(location.getCreatedDate());
+
+//            PlaceCategory placeCategory;
+            PlaceCategory placeCategory = placeCategoryRepository.findById(location.getIdPlaceCategory()).orElse(new PlaceCategory());
+            locationProfileDTO.setPlaceCategory(placeCategory.getName());
+//            Content content;
+            Content content = contentRepository.findById(location.getIdContent()).orElse(new Content());
+            locationProfileDTO.setContent(content.getDetail());
+//            Status  status;
+            Status status = statusRepository.findById(location.getIdStatus()).orElse(new Status());
+            locationProfileDTO.setStatus(status.getName());
+//            Address address;
+            Address address = addressRepository.findById(location.getIdAddress()).orElse(new Address());
+            locationProfileDTO.setAddress(address.getName());
+//            Contact contact;
+            Contact contact = contactRepository.findById(location.getIdContact()).orElse(new Contact());
+            locationProfileDTO.setEmail(contact.getEmail());
+            locationProfileDTO.setPhone(contact.getPhone());
+//            Users users;
+            Users users = usersRepository.findById(location.getIdUser()).orElse(new Users());
+            locationProfileDTO.setUsersname(users.getUsername());
+//            Duration duration;
+            Duration duration = durationRepository.findById(location.getIdDuration()).orElse(new Duration());
+            locationProfileDTO.setDuration(duration.getTime());
+
+//            List<Picture> pictureList;
+            ArrayList<Picture> pictures = pictureRepository.findByIdLocation(location.getId());
+            locationProfileDTO.setPictureList(pictures);
+
+            listLocationDTO.add(locationProfileDTO);
+        }
+        return  listLocationDTO;
+
+    }
+
+    public  List<Location> findAllLocationOfUserEvaluation(Long id){
+        return  locationRepository.getAllLocationByUser(id);
+    }
 
     public List<Location> findAllLocation(){
         return (List<Location>) locationRepository.findAll();
