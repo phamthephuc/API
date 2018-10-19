@@ -24,8 +24,16 @@ public class EvaluationService {
         return evaluationRepository.findById(id);
     }
 
+    public List<Evaluation> findAllEvaluationByIdUser(Long idUser) {
+        return evaluationRepository.findAllByIdUser(idUser);
+    }
+
     public  void createEvaluation(Evaluation evaluation){
         evaluationRepository.save(evaluation);
+    }
+
+    public List<Evaluation> findAllRatingWithTheSameLocationOfTwoUser(Long idUserRecommend, Long idUser2) {
+        return evaluationRepository.findAllRatingWithTheSameLocationOfTwoUser(idUserRecommend,idUser2);
     }
 
     public void updateEvaluation(Evaluation evaluation){

@@ -15,4 +15,20 @@ public class Duration {
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     Long id;
     Long  time;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getTime() {
+        return time;
+    }
+
+    public void setTime(Long time) {
+        this.time = time;
+    }
 }

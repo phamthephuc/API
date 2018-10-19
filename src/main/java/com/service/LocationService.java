@@ -99,8 +99,17 @@ public class LocationService {
 //        return  listLocationDTO;
 //    }
 
-    public  List<LocationDTO> findAllLocationByCategoryId(Long id){
-        List<Location> listLocation = locationRepository.findByIdPlaceCategory(id);
+    public List<LocationProfileDTO> findAllLocationRecommended(Long idUserRecommended, Long idUserRelative) {
+        List<Location> listLocation = locationRepository.getLocationRecommend(idUserRecommended, idUserRelative);
+        return  getAllLocationProfileDTOWithLocation(listLocation);
+    }
+
+    public List<LocationProfileDTO> findAllLocationRecommendedWithHeightScorce() {
+        List<Location> listLocation = locationRepository.getLocationRecommendWithHeightScore();
+        return  getAllLocationProfileDTOWithLocation(listLocation);
+    }
+
+    public List<LocationDTO> getAllLocationDTOWithLocation(List<Location> listLocation) {
         List<LocationDTO> listLocationDTO = new ArrayList<>();
         for (Location location : listLocation){
             LocationDTO locationDTO = new LocationDTO();
@@ -136,12 +145,14 @@ public class LocationService {
             locationDTO.setPictureList(pictures);
             listLocationDTO.add(locationDTO);
         }
-        return  listLocationDTO;
-
+        return listLocationDTO;
+    }
+    public  List<LocationDTO> findAllLocationByCategoryId(Long id){
+        List<Location> listLocation = locationRepository.findByIdPlaceCategory(id);
+        return  getAllLocationDTOWithLocation(listLocation);
     }
 
-    public  List<LocationProfileDTO> findAllLocationProfileByCategoryId(Long id){
-        List<Location> listLocation = locationRepository.findByIdPlaceCategory(id);
+    public List<LocationProfileDTO> getAllLocationProfileDTOWithLocation(List<Location> listLocation) {
         List<LocationProfileDTO> listLocationDTO = new ArrayList<>();
         for (Location location : listLocation){
             LocationProfileDTO locationProfileDTO = new LocationProfileDTO();
@@ -179,8 +190,12 @@ public class LocationService {
 
             listLocationDTO.add(locationProfileDTO);
         }
-        return  listLocationDTO;
-
+        return listLocationDTO;
+    }
+    public  List<LocationProfileDTO> findAllLocationProfileByCategoryId(Long id){
+        List<Location> listLocation = locationRepository.findByIdPlaceCategory(id);
+        List<LocationProfileDTO> listLocationDTO = new ArrayList<>();
+        return  getAllLocationProfileDTOWithLocation(listLocation);
     }
 
     public  List<Location> findAllLocationOfUserEvaluation(Long id){
