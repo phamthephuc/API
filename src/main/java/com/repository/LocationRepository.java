@@ -15,9 +15,9 @@ public interface LocationRepository extends CrudRepository<Location, Long> {
 
     public List<Location> findByIdPlaceCategory(Long id);
 
-    @Query(value = "SELECT location.* FROM location INNER JOIN evaluation ON location.id = evaluation.id_location WHERE evaluation.id_user = ?2 AND evaluation.id_location NOT IN (SELECT evl.id_location FROM evaluation AS evl Where evl.id_user = ?1 ) ORDER BY evaluation.score DESC LIMIT 0,10;" , nativeQuery = true)
+    @Query(value = "SELECT location.* FROM location INNER JOIN evaluation ON location.id = evaluation.id_location WHERE evaluation.id_user = ?2 AND evaluation.id_location NOT IN (SELECT evl.id_location FROM evaluation AS evl Where evl.id_user = ?1 ) ORDER BY evaluation.score DESC LIMIT 10;" , nativeQuery = true)
     public List<Location> getLocationRecommend(Long idUserRecommend, Long idUser2);
 
-    @Query(value = "SELECT location.* FROM location INNER JOIN evaluation ON location.id = evaluation.id_location ORDER BY evaluation.score DESC LIMIT 0,10;" , nativeQuery = true)
+    @Query(value = "SELECT location.* FROM location INNER JOIN evaluation ON location.id = evaluation.id_location ORDER BY evaluation.score DESC LIMIT 10;" , nativeQuery = true)
     public List<Location> getLocationRecommendWithHeightScore();
 }
