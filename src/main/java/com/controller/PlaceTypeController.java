@@ -18,6 +18,7 @@ public class PlaceTypeController {
     @Autowired
     PlaceTypeService placeTypeService;
 
+//    @CrossOrigin(origins = "http://domain2.com")gi
     @GetMapping( value = "/place-types")
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Something went wrong"), //
