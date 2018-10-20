@@ -19,7 +19,7 @@ public class PlaceCategoryController {
     @Autowired
     PlaceCategoryService placeCategoryService;
 
-    @GetMapping(value = "/placecategorys")
+    @GetMapping(value = "/place-categorys")
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Something went wrong"), //
             @ApiResponse(code = 403, message = "Access denied"), //
@@ -28,23 +28,23 @@ public class PlaceCategoryController {
         return  new APIResponseDTO(200,"Success!",placeCategoryService.findAllPlaceCategory());
     }
 
-    @GetMapping(value = "/placecategory-of-placeType/{id}")
+    @GetMapping(value = "/place-category-of-place-Type/{id}")
     public  APIResponseDTO findAllPlaceCategoryOfOneType(@PathVariable Long id){
         return  new APIResponseDTO(200,"Success", placeCategoryService.findAllPlaceCategoryOfOneType(id));
     }
 
-    @GetMapping(value = "/placecategory/{id}")
+    @GetMapping(value = "/place-category/{id}")
     public  APIResponseDTO getPlaceCategory( @PathVariable Long id){
         return  new APIResponseDTO(200,"Success!",placeCategoryService.findById(id));
     }
 
-    @PostMapping(value = "/placecategory")
+    @PostMapping(value = "/place-category")
     public APIResponseDTO  createPlaceCategory(@RequestBody PlaceCategory placeCategory){
         placeCategoryService.createPlaceCategory(placeCategory);
         return  new APIResponseDTO(201,"Created!",placeCategory);
     }
 
-    @PutMapping(value = "/placecategory/{id}")
+    @PutMapping(value = "/place-category/{id}")
     public ResponseEntity<Object> editPlaceCategory(@RequestBody PlaceCategory placeCategory, @PathVariable Long id){
         Optional<PlaceCategory> placeCategory1 = placeCategoryService.findById(id);
         if (!placeCategory1.isPresent()) return ResponseEntity.notFound().build();
@@ -54,7 +54,7 @@ public class PlaceCategoryController {
 
     }
 
-    @DeleteMapping(value = "/placeCategorys/{id}")
+    @DeleteMapping(value = "/place-categorys/{id}")
     public APIResponseDTO deletePlaceCategory(@PathVariable long id) {
         placeCategoryService.deletePlaceCategory(id);
         return  new APIResponseDTO(200,"Deleted!", null);

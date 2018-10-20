@@ -18,7 +18,7 @@ public class PlaceTypeController {
     @Autowired
     PlaceTypeService placeTypeService;
 
-    @GetMapping( value = "/placeTypes")
+    @GetMapping( value = "/place-types")
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Something went wrong"), //
             @ApiResponse(code = 403, message = "Access denied"), //
@@ -27,20 +27,20 @@ public class PlaceTypeController {
         return new APIResponseDTO(200,"Success!",placeTypeService.findAll());
     }
 
-    @GetMapping(value = "/placeType/{id}")
+    @GetMapping(value = "/place-type/{id}")
     public  APIResponseDTO getPlaceType( @PathVariable Long id){
         return  new APIResponseDTO(200,"Success!",placeTypeService.findById(id));
     }
 
 
-    @PostMapping(value = "/placeType")
+    @PostMapping(value = "/place-type")
     public APIResponseDTO createPlaceType(@RequestBody PlaceType placeType){
         placeTypeService.save(placeType);
         return  new APIResponseDTO(201,"Created!",placeType);
 
     }
 
-    @PutMapping(value = "/placeType/{id}")
+    @PutMapping(value = "/place-type/{id}")
     public ResponseEntity<Object>  editPlaceType(@RequestBody PlaceType placeType, @PathVariable Long id){
         Optional<PlaceType> placeType1 = placeTypeService.findById(id);
         if (!placeType1.isPresent()) return ResponseEntity.notFound().build();
@@ -50,7 +50,7 @@ public class PlaceTypeController {
 
     }
 
-    @DeleteMapping(value = "/placeTypes/{id}")
+    @DeleteMapping(value = "/place-types/{id}")
     public APIResponseDTO deleteStudent(@PathVariable long id) {
         placeTypeService.deleteById(id);
         return  new APIResponseDTO(201,"Deleted!",null);
