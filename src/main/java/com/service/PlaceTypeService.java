@@ -15,7 +15,7 @@ public class PlaceTypeService {
     PlaceTypeRepository placeTypeRepository;
 
     public List<PlaceType> findAll(){
-        return (List<PlaceType>) placeTypeRepository.findAll();
+        return (List<PlaceType>) placeTypeRepository.findAllByOrderByIdDesc();
     }
 
     public void save(PlaceType placeType){
