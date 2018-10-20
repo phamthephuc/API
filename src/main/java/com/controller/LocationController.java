@@ -2,12 +2,11 @@ package com.controller;
 
 import com.dto.APIResponseDTO;
 import com.entity.Location;
-import com.entity.PlaceCategory;
 import com.service.LocationService;
-import com.service.PlaceCategoryService;
 import com.service.RecommendService;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,10 +14,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
+import javax.activation.FileTypeMap;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Optional;
 
 @RestController
@@ -54,10 +55,20 @@ public class LocationController {
     public ResponseEntity<Object> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
         File convertFile = new File("\resources\\images\\" + file.getOriginalFilename());
         convertFile.createNewFile();
-        FileOutputStream fout =new FileOutputStream(convertFile);
+        FileOutputStream fout = new FileOutputStream(convertFile);
         fout.write(file.getBytes());
         fout.close();
         return new ResponseEntity<>("File is upload Seccessfully", HttpStatus.OK);
+    }
+
+
+    @GetMapping("/show-picture")
+    public ResponseEntity<byte[]> getImage() throws IOException{
+        File img = new File("src/main/resources/images/pratice.jpg");
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.valueOf(FileTypeMap.getDefaultFileTypeMap().getContentType(img)))
+                .body(Files.readAllBytes(img.toPath()));
     }
 
     @GetMapping(value = "/location/{id}")
