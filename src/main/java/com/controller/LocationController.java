@@ -1,8 +1,11 @@
 package com.controller;
 
 import com.dto.APIResponseDTO;
+import com.dto.LocationProfileDTO;
 import com.entity.Location;
+import com.model.LocationRequest;
 import com.service.LocationService;
+import com.service.PictureService;
 import com.service.RecommendService;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -26,10 +29,13 @@ import java.util.Optional;
 
 
 public class LocationController {
+
     @Autowired
     RecommendService recommendService;
     @Autowired
     LocationService locationService;
+    @Autowired
+    PictureService pictureService;
 
 
 
@@ -93,6 +99,28 @@ public class LocationController {
         locationService.createLocation(location);
         return  new APIResponseDTO(201, "Created!",location);
     }
+
+    @PostMapping(value = "/create-location")
+    public  APIResponseDTO createNewLocation(@RequestBody LocationRequest locationRequest, @RequestParam("file") MultipartFile file) throws IOException {
+        locationService.createNewLocation(locationRequest);
+        Long idLocation = locationService.getIdLocationLastest();
+        pictureService.createPicture(file, idLocation);
+        LocationProfileDTO locationCreated = locationService.getLocationLastest();
+
+        return  new APIResponseDTO(200, "Created", locationCreated);
+    }
+
+    @PostMapping(value = "/create-location-non-picture")
+    public  APIResponseDTO createNewLocation(@RequestBody LocationRequest locationRequest) throws IOException {
+        locationService.createNewLocation(locationRequest);
+        LocationProfileDTO locationCreated = locationService.getLocationLastest();
+
+        return  new APIResponseDTO(200, "Created", locationCreated);
+    }
+
+
+
+
 
     @PutMapping(value = "/location/{id}")
     public ResponseEntity<Object> editLocation(@RequestBody Location location, @PathVariable Long id){

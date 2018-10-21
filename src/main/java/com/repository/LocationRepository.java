@@ -20,4 +20,7 @@ public interface LocationRepository extends CrudRepository<Location, Long> {
 
     @Query(value = "SELECT location.* FROM location INNER JOIN evaluation ON location.id = evaluation.id_location ORDER BY evaluation.score DESC LIMIT 10;" , nativeQuery = true)
     public List<Location> getLocationRecommendWithHeightScore();
+
+    @Query(value = "SELECT location.* from location  order BY location.id DESC  limit(1);", nativeQuery = true)
+    public Location findLastestLocation();
 }

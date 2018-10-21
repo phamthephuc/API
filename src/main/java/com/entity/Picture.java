@@ -17,4 +17,14 @@ public class Picture {
     String name;
     String image;
     Long idLocation;
+
+
+    public  Picture(long id, String name , String link, Long idLocation){
+        this.id = id;
+        this.name = name;
+        this.image = link;
+        this.idLocation = idLocation;
+    }
+
+
 }
