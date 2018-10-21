@@ -43,12 +43,12 @@ public class PlaceTypeController {
     }
 
     @PutMapping(value = "/place-type/{id}")
-    public ResponseEntity<Object>  editPlaceType(@RequestBody PlaceType placeType, @PathVariable Long id){
-        Optional<PlaceType> placeType1 = placeTypeService.findById(id);
-        if (!placeType1.isPresent()) return ResponseEntity.notFound().build();
+    public APIResponseDTO  editPlaceType(@RequestBody PlaceType placeType, @PathVariable Long id){
+        Optional<PlaceType> placeTypeOld = placeTypeService.findById(id);
+        if (!placeTypeOld.isPresent()) return new APIResponseDTO(202, "not Exist", placeType);
         placeType.setId(id);
         placeTypeService.save(placeType);
-        return ResponseEntity.noContent().build();
+        return new APIResponseDTO(200, "Edited", placeType);
 
     }
 
