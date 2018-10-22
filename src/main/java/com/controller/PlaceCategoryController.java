@@ -28,7 +28,7 @@ public class PlaceCategoryController {
         return  new APIResponseDTO(200,"Success!",placeCategoryService.findAllPlaceCategory());
     }
 
-    @GetMapping(value = "/place-category-of-place-Type/{id}")
+    @GetMapping(value = "/place-category-of-place-type/{id}")
     public  APIResponseDTO findAllPlaceCategoryOfOneType(@PathVariable Long id){
         return  new APIResponseDTO(200,"Success", placeCategoryService.findAllPlaceCategoryOfOneType(id));
     }
@@ -45,12 +45,12 @@ public class PlaceCategoryController {
     }
 
     @PutMapping(value = "/place-category/{id}")
-    public ResponseEntity<Object> editPlaceCategory(@RequestBody PlaceCategory placeCategory, @PathVariable Long id){
-        Optional<PlaceCategory> placeCategory1 = placeCategoryService.findById(id);
-        if (!placeCategory1.isPresent()) return ResponseEntity.notFound().build();
+    public APIResponseDTO editPlaceCategory(@RequestBody PlaceCategory placeCategory, @PathVariable Long id){
+        Optional<PlaceCategory> placeCategoryOld = placeCategoryService.findById(id);
+        if (!placeCategoryOld.isPresent()) return new APIResponseDTO(200, "Not Existed!", null);
         placeCategory.setId(id);
         placeCategoryService.updatePlaceCategory(placeCategory);
-        return ResponseEntity.noContent().build();
+        return new APIResponseDTO(200, "Edited", placeCategory);
 
     }
 
