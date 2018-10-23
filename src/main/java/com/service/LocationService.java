@@ -184,8 +184,9 @@ public class LocationService {
         return  locationRepository.getAllLocationByUser(id);
     }
 
-    public List<Location> findAllLocation(){
-        return (List<Location>) locationRepository.findAll();
+    public List<LocationProfileDTO> findAllLocation(){
+        List<Location> listLocations = (List<Location>) locationRepository.findAll();
+        return  getAllLocationProfileDTOWithLocation(listLocations);
     }
 
     public LocationProfileDTO findById(Long id){
