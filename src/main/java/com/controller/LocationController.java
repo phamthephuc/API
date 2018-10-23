@@ -147,7 +147,7 @@ public class LocationController {
     @GetMapping(value = "/type-place", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public APIResponseDTO getAllLocationByPlaceTypeId(@RequestParam("id") Long id) {
         TypeResponseDTO typeResponseDTO = new TypeResponseDTO();
-        typeResponseDTO = locationService.....
+//        typeResponseDTO = locationService.....
         return  new APIResponseDTO();
     }
 }

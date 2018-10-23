@@ -254,9 +254,9 @@ public class LocationService {
 
         TypeResponseDTO typeResponseDTO = new TypeResponseDTO();
         typeResponseDTO.setId(id);
-        typeResponseDTO.setListCategoryResponse(placeCategoryRepository.);
+        typeResponseDTO.setListCategoryResponse(new ArrayList<>());
 
 
-        return
+       return new TypeResponseDTO();
     }
 }

@@ -36,5 +36,11 @@ public class PictureController {
 
     }
 
+    @RequestMapping(value = "/add-picture", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public APIResponseDTO addNewPicture(@RequestParam("file") MultipartFile file) throws IOException {
+        return new APIResponseDTO(200,"Succesd", pictureService.storeFile(file));
+
+    }
+
 
 }
