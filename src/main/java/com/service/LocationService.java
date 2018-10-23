@@ -5,15 +5,12 @@ import com.dto.LocationProfileDTO;
 import com.entity.*;
 import com.model.LocationRequest;
 import com.repository.*;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class LocationService {
@@ -180,7 +177,6 @@ public class LocationService {
 
     public  List<LocationProfileDTO> findAllLocationProfileByCategoryId(Long id){
         List<Location> listLocation = locationRepository.findByIdPlaceCategory(id);
-        List<LocationProfileDTO> listLocationDTO = new ArrayList<>();
         return  getAllLocationProfileDTOWithLocation(listLocation);
     }
 
@@ -191,8 +187,10 @@ public class LocationService {
     public List<Location> findAllLocation(){
         return (List<Location>) locationRepository.findAll();
     }
-    public Optional<Location> findById(Long id){
-        return locationRepository.findById(id);
+
+    public LocationProfileDTO findById(Long id){
+        Location locationSelected=  locationRepository.findById(id).orElse(new Location());
+        return  getLocationProfileDTOWithLocation(locationSelected);
     }
 
     public  void createLocation(Location location ){

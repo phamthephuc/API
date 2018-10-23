@@ -123,11 +123,9 @@ public class LocationController {
 
 
     @PutMapping(value = "/location/{id}")
-    public ResponseEntity<Object> editLocation(@RequestBody Location location, @PathVariable Long id){
-        Optional<Location> locationOld = locationService.findById(id);
-        if (!locationOld.isPresent()) return ResponseEntity.notFound().build();
-        location.setId(id);
-        locationService.updateLocation(location);
+    public ResponseEntity<Object> editLocation(@RequestBody LocationRequest LocationRequest, @PathVariable Long id){
+        LocationProfileDTO locationOld = locationService.findById(id);
+        if (locationOld == null) return ResponseEntity.notFound().build();
         return ResponseEntity.noContent().build();
 
     }

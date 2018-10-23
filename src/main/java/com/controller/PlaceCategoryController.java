@@ -28,7 +28,7 @@ public class PlaceCategoryController {
         return  new APIResponseDTO(200,"Success!",placeCategoryService.findAllPlaceCategory());
     }
 
-    @GetMapping(value = "/place-category-of-place-type/{id}")
+    @GetMapping(value = "/place-type/{id}/place-category")
     public  APIResponseDTO findAllPlaceCategoryOfOneType(@PathVariable Long id){
         return  new APIResponseDTO(200,"Success", placeCategoryService.findAllPlaceCategoryOfOneType(id));
     }
