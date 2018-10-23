@@ -23,4 +23,5 @@ public interface LocationRepository extends CrudRepository<Location, Long> {
 
     @Query(value = "SELECT location.* from location  order BY location.id DESC  limit(1);", nativeQuery = true)
     public Location findLastestLocation();
+
 }

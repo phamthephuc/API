@@ -2,6 +2,7 @@ package com.controller;
 
 import com.dto.APIResponseDTO;
 import com.dto.LocationProfileDTO;
+import com.dto.TypeResponseDTO;
 import com.entity.Location;
 import com.model.LocationRequest;
 import com.service.LocationService;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.activation.FileTypeMap;
+import javax.ws.rs.PathParam;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -140,5 +142,12 @@ public class LocationController {
     @GetMapping(value = "/location/user-evaluation/{id}")
     public APIResponseDTO getLocationOfUserEvaluation(@PathVariable long id){
         return new APIResponseDTO(200, "Success",locationService.findAllLocationOfUserEvaluation(id));
+    }
+
+    @GetMapping(value = "/type-place", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public APIResponseDTO getAllLocationByPlaceTypeId(@RequestParam("id") Long id) {
+        TypeResponseDTO typeResponseDTO = new TypeResponseDTO();
+        typeResponseDTO = locationService.....
+        return  new APIResponseDTO();
     }
 }

@@ -2,6 +2,7 @@ package com.service;
 
 import com.dto.LocationDTO;
 import com.dto.LocationProfileDTO;
+import com.dto.TypeResponseDTO;
 import com.entity.*;
 import com.model.LocationRequest;
 import com.repository.*;
@@ -247,5 +248,15 @@ public class LocationService {
 
     public void deleteLocation(Long id){
         locationRepository.deleteById(id);
+    }
+
+    public TypeResponseDTO getAllLocationByPlaceTypeId(Long id){
+
+        TypeResponseDTO typeResponseDTO = new TypeResponseDTO();
+        typeResponseDTO.setId(id);
+        typeResponseDTO.setListCategoryResponse(placeCategoryRepository.);
+
+
+        return
     }
 }
