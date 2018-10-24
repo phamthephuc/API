@@ -9,6 +9,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -45,6 +46,39 @@ public class PictureService {
     private  final  PictureRepository repository;
     private final ResourceLoader resourceLoader;
 
+
+    private String locationStorage = "image";
+
+    @Autowired
+    private ServletContext servletContext;
+
+    public boolean storeFile(MultipartFile file) {
+        try {
+            String realLocation = servletContext.getRealPath(locationStorage);
+            File locationStore = new File(realLocation);
+            if (!locationStore.exists()) {
+                locationStore.mkdirs();
+            }
+            String fileName = file.getOriginalFilename();
+            if (!fileName.contains(".png") && !fileName.contains(".jpg") && !fileName.contains(".gif")
+                    && !fileName.contains(".jpeg")) {
+                return false;
+            }
+            File img = new File(realLocation + File.separator + file.getOriginalFilename());
+            file.transferTo(img);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+//		InputStream imageFolder = UserProfileApiController.class.getResourceAsStream("static/images/");
+//		ClassLoader classLoader = getClass().getClassLoader();
+//	    File file = new File(classLoader.getResource("static/images/").getFile(),user.getFile().getOriginalFilename());
+//	    System.out.println(file.getAbsolutePath());
+//	    user.getFile().transferTo(file);
+    }
+
+
     @Autowired
     public PictureService(PictureRepository pictureRepository, ResourceLoader resourceLoader){
         this.repository = pictureRepository;
@@ -72,9 +106,9 @@ public class PictureService {
         Files.deleteIfExists(Paths.get(UPLOAD_ROOT, byName.getName()));
     }
 
-    public boolean storeFile(MultipartFile file) {
+    public boolean storeFile1(MultipartFile file) {
         try {
-            String realLocation = "/images";
+            String realLocation = "/src/resources/images";
             File locationStore = new File(realLocation);
             if (!locationStore.exists()) {
                 locationStore.mkdirs();
