@@ -180,6 +180,11 @@ public class LocationService {
         return  getAllLocationProfileDTOWithLocation(listLocation);
     }
 
+    public  List<LocationProfileDTO> findTop10LocationProfileByCategoryId(Long id){
+        List<Location> listLocation = locationRepository.findTop10ByIdPlaceCategory(id);
+        return  getAllLocationProfileDTOWithLocation(listLocation);
+    }
+
     public  List<Location> findAllLocationOfUserEvaluation(Long id){
         return  locationRepository.getAllLocationByUser(id);
     }
@@ -190,7 +195,12 @@ public class LocationService {
     }
 
     public LocationProfileDTO findById(Long id){
-        Location locationSelected=  locationRepository.findById(id).orElse(new Location());
+        Location locationSelected =  locationRepository.findById(id).orElse(new Location());
+        return  getLocationProfileDTOWithLocation(locationSelected);
+    }
+
+    public LocationProfileDTO findLastestLocationByIdType(Long idType){
+        Location locationSelected =  locationRepository.findLastestLocationByIdType(idType);
         return  getLocationProfileDTOWithLocation(locationSelected);
     }
 
