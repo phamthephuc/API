@@ -3,6 +3,7 @@ package com.controller;
 import com.dto.APIResponseDTO;
 import com.entity.PlaceType;
 import com.service.PlaceTypeService;
+import com.sun.org.apache.xpath.internal.operations.String;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,10 @@ public class PlaceTypeController {
         return  new APIResponseDTO(200,"Success!",placeTypeService.findById(id));
     }
 
+    @GetMapping(value = "app/place-type/{id}")
+    public  APIResponseDTO getPlaceTypeForApp( @PathVariable Long id){
+        return  new APIResponseDTO(200,"Success!",placeTypeService.findTypeResponseDTOByIdType(id));
+    }
 
     @PostMapping(value = "/place-type")
     public APIResponseDTO createPlaceType(@RequestBody PlaceType placeType){

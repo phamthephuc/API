@@ -2,7 +2,7 @@ package com.service;
 
 import com.dto.LocationDTO;
 import com.dto.LocationProfileDTO;
-import com.dto.TypeResponseDTO;
+import com.dto.LocationProfileForTypeDTO;
 import com.entity.*;
 import com.model.LocationRequest;
 import com.repository.*;
@@ -138,6 +138,15 @@ public class LocationService {
         return listLocationDTO;
     }
 
+    public List<LocationProfileForTypeDTO> getAllLocationProfileForTypeDTOWithLocation(List<Location> listLocation) {
+        List<LocationProfileForTypeDTO> listLocationDTO = new ArrayList<LocationProfileForTypeDTO>();
+        for (Location location : listLocation){
+            LocationProfileForTypeDTO locationProfileDTO = getLocationProfileForTypeDTOWithLocation(location);
+            listLocationDTO.add(locationProfileDTO);
+        }
+        return listLocationDTO;
+    }
+
     public LocationProfileDTO getLocationProfileDTOWithLocation(Location location) {
 
             LocationProfileDTO locationProfileDTO = new LocationProfileDTO();
@@ -176,9 +185,26 @@ public class LocationService {
         return locationProfileDTO;
     }
 
+    public LocationProfileForTypeDTO getLocationProfileForTypeDTOWithLocation(Location location) {
+        LocationProfileForTypeDTO locationProfileDTO = new LocationProfileForTypeDTO();
+        locationProfileDTO.setId(location.getId());
+        locationProfileDTO.setName(location.getName());
+        locationProfileDTO.setIntroduction(location.getIntroduction());
+        ArrayList<Picture> pictureOfLocation = pictureRepository.findByIdLocation(location.getId());
+        locationProfileDTO.setPictureList(pictureOfLocation);
+        return locationProfileDTO;
+    }
+
+
+
     public  List<LocationProfileDTO> findAllLocationProfileByCategoryId(Long id){
         List<Location> listLocation = locationRepository.findByIdPlaceCategory(id);
         return  getAllLocationProfileDTOWithLocation(listLocation);
+    }
+
+    public  List<LocationProfileForTypeDTO> findTop10LocationProfileByCategoryId(Long id){
+        List<Location> listLocation = locationRepository.findTop10ByIdPlaceCategory(id);
+        return  getAllLocationProfileForTypeDTOWithLocation(listLocation);
     }
 
     public  List<Location> findAllLocationOfUserEvaluation(Long id){
@@ -191,8 +217,13 @@ public class LocationService {
     }
 
     public LocationProfileDTO findById(Long id){
-        Location locationSelected=  locationRepository.findById(id).orElse(new Location());
+        Location locationSelected =  locationRepository.findById(id).orElse(new Location());
         return  getLocationProfileDTOWithLocation(locationSelected);
+    }
+
+    public LocationProfileForTypeDTO findLastestLocationByIdType(Long idType){
+        Location locationSelected =  locationRepository.findLastestLocationByIdType(idType);
+        return  getLocationProfileForTypeDTOWithLocation(locationSelected);
     }
 
     public  void createLocation(Location location ){
@@ -248,15 +279,5 @@ public class LocationService {
 
     public void deleteLocation(Long id){
         locationRepository.deleteById(id);
-    }
-
-    public TypeResponseDTO getAllLocationByPlaceTypeId(Long id){
-
-        TypeResponseDTO typeResponseDTO = new TypeResponseDTO();
-        typeResponseDTO.setId(id);
-        typeResponseDTO.setListCategoryResponse(new ArrayList<>());
-
-
-       return new TypeResponseDTO();
     }
 }

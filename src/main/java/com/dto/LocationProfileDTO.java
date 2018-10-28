@@ -126,4 +126,6 @@ public class LocationProfileDTO {
     public void setPictureList(List<Picture> pictureList) {
         this.pictureList = pictureList;
     }
+
+
 }

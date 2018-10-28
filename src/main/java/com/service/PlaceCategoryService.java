@@ -1,10 +1,14 @@
 package com.service;
 
+import com.dto.CategoryResponseDTO;
+import com.dto.LocationProfileDTO;
+import com.dto.LocationProfileForTypeDTO;
 import com.entity.PlaceCategory;
 import com.repository.PlaceCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +17,9 @@ public class PlaceCategoryService {
 
     @Autowired
     PlaceCategoryRepository placeCategoryRepository;
+
+    @Autowired
+    LocationService locationService;
 
     public List<PlaceCategory> findAllPlaceCategory(){
         return (List<PlaceCategory>) placeCategoryRepository.findAll();
@@ -36,5 +43,15 @@ public class PlaceCategoryService {
 
     public void deletePlaceCategory(Long id){
         placeCategoryRepository.deleteById(id);
+    }
+
+    public ArrayList<CategoryResponseDTO> findAllCategoryDetailOfOneType(Long id) {
+        ArrayList<CategoryResponseDTO> listCTDTO = new ArrayList<>();
+        List<PlaceCategory> listPlaceCategoty = findAllPlaceCategoryOfOneType(id);
+        for(PlaceCategory placeCategory : listPlaceCategoty) {
+            List<LocationProfileForTypeDTO> listLocationOfOneCategory = locationService.findTop10LocationProfileByCategoryId(placeCategory.getId());
+            listCTDTO.add(new CategoryResponseDTO(placeCategory.getId(),placeCategory.getName(),listLocationOfOneCategory));
+        }
+        return listCTDTO;
     }
 }
