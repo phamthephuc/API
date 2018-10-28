@@ -202,15 +202,9 @@ public class LocationService {
         return  getAllLocationProfileDTOWithLocation(listLocation);
     }
 
-<<<<<<< HEAD
     public  List<LocationProfileForTypeDTO> findTop10LocationProfileByCategoryId(Long id){
         List<Location> listLocation = locationRepository.findTop10ByIdPlaceCategory(id);
         return  getAllLocationProfileForTypeDTOWithLocation(listLocation);
-=======
-    public  List<LocationProfileDTO> findTop10LocationProfileByCategoryId(Long id){
-        List<Location> listLocation = locationRepository.findTop10ByIdPlaceCategory(id);
-        return  getAllLocationProfileDTOWithLocation(listLocation);
->>>>>>> edb20ba80bd3d383a3f1c9026b89bec78532cc7f
     }
 
     public  List<Location> findAllLocationOfUserEvaluation(Long id){
@@ -224,14 +218,6 @@ public class LocationService {
 
     public LocationProfileDTO findById(Long id){
         Location locationSelected =  locationRepository.findById(id).orElse(new Location());
-<<<<<<< HEAD
-=======
-        return  getLocationProfileDTOWithLocation(locationSelected);
-    }
-
-    public LocationProfileDTO findLastestLocationByIdType(Long idType){
-        Location locationSelected =  locationRepository.findLastestLocationByIdType(idType);
->>>>>>> edb20ba80bd3d383a3f1c9026b89bec78532cc7f
         return  getLocationProfileDTOWithLocation(locationSelected);
     }
 

@@ -2,10 +2,7 @@ package com.service;
 
 import com.dto.CategoryResponseDTO;
 import com.dto.LocationProfileDTO;
-<<<<<<< HEAD
 import com.dto.LocationProfileForTypeDTO;
-=======
->>>>>>> edb20ba80bd3d383a3f1c9026b89bec78532cc7f
 import com.entity.PlaceCategory;
 import com.repository.PlaceCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,11 +49,7 @@ public class PlaceCategoryService {
         ArrayList<CategoryResponseDTO> listCTDTO = new ArrayList<>();
         List<PlaceCategory> listPlaceCategoty = findAllPlaceCategoryOfOneType(id);
         for(PlaceCategory placeCategory : listPlaceCategoty) {
-<<<<<<< HEAD
             List<LocationProfileForTypeDTO> listLocationOfOneCategory = locationService.findTop10LocationProfileByCategoryId(placeCategory.getId());
-=======
-            List<LocationProfileDTO> listLocationOfOneCategory = locationService.findTop10LocationProfileByCategoryId(placeCategory.getId());
->>>>>>> edb20ba80bd3d383a3f1c9026b89bec78532cc7f
             listCTDTO.add(new CategoryResponseDTO(placeCategory.getId(),placeCategory.getName(),listLocationOfOneCategory));
         }
         return listCTDTO;
