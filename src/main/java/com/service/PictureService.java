@@ -18,9 +18,9 @@ import java.nio.file.Paths;
 
 @Service
 public class PictureService {
-//
-//    @Autowired
-//    PictureRepository pictureRepository;
+
+    @Autowired
+    PictureRepository pictureRepository;
 //
 //    public List<Picture> findAllPicture(){
 //        return (List<Picture>) pictureRepository.findAll();
@@ -52,7 +52,7 @@ public class PictureService {
     @Autowired
     private ServletContext servletContext;
 
-    public boolean storeFile(MultipartFile file) {
+    public boolean storeFile(MultipartFile file, Long idLocation) {
         try {
             String realLocation = servletContext.getRealPath(locationStorage);
             File locationStore = new File(realLocation);
@@ -66,6 +66,11 @@ public class PictureService {
             }
             File img = new File(realLocation + File.separator + file.getOriginalFilename());
             file.transferTo(img);
+            Picture picture = new Picture();
+            picture.setImage(file.getOriginalFilename());
+            picture.setName(file.getOriginalFilename());
+            picture.setIdLocation(idLocation);
+            pictureRepository.save(picture);
             return true;
         } catch (Exception e) {
             e.printStackTrace();

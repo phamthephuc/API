@@ -26,5 +26,11 @@ public class Picture {
         this.idLocation = idLocation;
     }
 
+    public Picture(){
+        super();
+    }
+
+
+
 
 }
