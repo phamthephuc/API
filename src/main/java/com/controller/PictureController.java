@@ -15,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 1800)
 public class PictureController {
     @Autowired
     PictureService pictureService;

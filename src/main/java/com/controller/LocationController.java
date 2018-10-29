@@ -28,8 +28,7 @@ import java.nio.file.Files;
 import java.util.Optional;
 
 @RestController
-
-
+@CrossOrigin(origins = "*", maxAge = 1800)
 public class LocationController {
 
     @Autowired
