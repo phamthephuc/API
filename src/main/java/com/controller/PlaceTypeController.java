@@ -61,4 +61,5 @@ public class PlaceTypeController {
         placeTypeService.deleteById(id);
         return  new APIResponseDTO(201,"Deleted!",null);
     }
+
 }

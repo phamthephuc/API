@@ -47,11 +47,12 @@ public class PlaceCategoryController {
 
     @PutMapping(value = "/place-category/{id}")
     public APIResponseDTO editPlaceCategory(@RequestBody PlaceCategory placeCategory, @PathVariable Long id){
-        Optional<PlaceCategory> placeCategoryOld = placeCategoryService.findById(id);
-        if (!placeCategoryOld.isPresent()) return new APIResponseDTO(200, "Not Existed!", null);
-        placeCategory.setId(id);
-        placeCategoryService.updatePlaceCategory(placeCategory);
-        return new APIResponseDTO(200, "Edited", placeCategory);
+        PlaceCategory placeCategoryOld = placeCategoryService.findById(id).orElse(new PlaceCategory());
+        System.out.print(placeCategory.getIdPlaceType());
+        if (placeCategoryOld == null) return new APIResponseDTO(200, "Not Existed!", null);
+        placeCategoryOld.setName(placeCategory.getName());
+        placeCategoryService.updatePlaceCategory(placeCategoryOld);
+        return new APIResponseDTO(200, "Edited", placeCategoryOld);
 
     }
 
