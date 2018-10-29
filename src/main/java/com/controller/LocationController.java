@@ -71,7 +71,9 @@ public class LocationController {
 
 
     @GetMapping("/show-picture")
-    public ResponseEntity<byte[]> getImage() throws IOException{
+    public ResponseEntity<byte[]> getImage(@RequestParam("nameImage") String nameImage) throws IOException{
+        String name = "src/main/resources/images";
+
         File img = new File("src/main/resources/images/pratice.jpg");
         return ResponseEntity
                 .ok()
