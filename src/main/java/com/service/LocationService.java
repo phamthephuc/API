@@ -252,8 +252,42 @@ public class LocationService {
         return getLocationProfileDTOWithLocation(locationRepository.findLastestLocation());
     }
 
-    public void updateLocation(Location location){
+    public void updateLocation(Location location)
+    {
         locationRepository.save(location);
+    }
+
+    public void editLocation(LocationRequest locationRequest, Long idLocation){
+        Location location = new Location();
+        location.setName(locationRequest.getName());
+        location.setIntroduction(locationRequest.getIntroduction());
+        location.setCreatedDate(new Date());
+        location.setIdPlaceCategory(locationRequest.getIdPlaceCategory());
+        location.setIdStatus(locationRequest.getIdStatus());
+
+        Content content = new Content();
+        content.setDetail(locationRequest.getContent());
+        contentRepository.save(content);
+        Content content1 = contentRepository.findLastestContent();
+        System.out.print(content1.getId());
+        location.setIdContent(contentRepository.findLastestContent().getId());
+
+        Contact contact = new Contact();
+        contact.setEmail(locationRequest.getEmail());
+        contact.setPhone(locationRequest.getPhone());
+        contactRepository.save(contact);
+        location.setIdContact(contactRepository.findLastestContact().getId());
+
+        Address address = new Address();
+        address.setName(locationRequest.getAddress());
+        address.setLink(locationRequest.getAddress());
+        addressRepository.save(address);
+        location.setIdAddress(addressRepository.findLastestAddress().getId());
+
+        location.setIdUser((long) 1);
+        location.setIdDuration(locationRequest.getIdDuration());
+        location.setId(idLocation);
+        Location locationsaved = locationRepository.save(location);
     }
 
     public void deleteLocation(Long id){

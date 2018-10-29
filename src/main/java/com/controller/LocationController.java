@@ -122,9 +122,18 @@ public class LocationController {
         return  new APIResponseDTO(200, "Created", locationCreated);
     }
 
+    @PutMapping(value = "/web/update-location/{idLocation}")
+    public APIResponseDTO updateLocation(@RequestBody LocationRequest locationRequest, @PathVariable Long idLocation){
 
+        LocationProfileDTO locationOld = locationService.findById(idLocation);
+        if (locationOld == null ) return new APIResponseDTO(500, "Not existed", null);
+        else {
+            locationService.editLocation(locationRequest, idLocation);
+            return  new APIResponseDTO(200, "Edited", null);
 
+        }
 
+    }
 
     @PutMapping(value = "/location/{id}")
     public ResponseEntity<Object> editLocation(@RequestBody LocationRequest LocationRequest, @PathVariable Long id){
