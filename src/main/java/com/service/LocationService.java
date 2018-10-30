@@ -190,9 +190,9 @@ public class LocationService {
         return  locationRepository.getAllLocationByUser(id);
     }
 
-    public List<LocationProfileDTO> findAllLocation(){
+    public List<Location> findAllLocation(){
         List<Location> listLocations = (List<Location>) locationRepository.findAll();
-        return  getAllLocationProfileDTOWithLocation(listLocations);
+        return  listLocations;
     }
 
     public LocationProfileDTO findById(Long id){
