@@ -76,7 +76,7 @@ public class PictureService {
             e.printStackTrace();
             return false;
         }
-//		InputStream imageFolder = UserProfileApiController.class.getResourceAsStream("static/images/");
+//		InputStream imageFolder = UserProfileApiController.class.getResoceAsSturream("static/images/");
 //		ClassLoader classLoader = getClass().getClassLoader();
 //	    File file = new File(classLoader.getResource("static/images/").getFile(),user.getFile().getOriginalFilename());
 //	    System.out.println(file.getAbsolutePath());
