@@ -2,19 +2,22 @@ package com.repository;
 
 import com.entity.Location;
 import com.entity.Users;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface LocationRepository extends CrudRepository<Location, Long> {
+public interface LocationRepository extends JpaRepository<Location, Long> {
 
     @Query(value = "Select * from location inner JOIN evaluation on evaluation.id_location = location.id " +
             "where evaluation.id_user = ?1", nativeQuery = true)
     public List<Location> getAllLocationByUser(Long id);
 
-
+    public Page<Location> findAllByIdPlaceCategory(Long id, Pageable pageable);
 
     public List<Location> findByIdPlaceCategory(Long id);
 
