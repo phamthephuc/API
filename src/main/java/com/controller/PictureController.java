@@ -2,6 +2,7 @@ package com.controller;
 
 import com.dto.APIResponseDTO;
 import com.entity.Picture;
+import com.service.FileStorageService;
 import com.service.PictureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,6 +21,9 @@ import java.io.IOException;
 public class PictureController {
     @Autowired
     PictureService pictureService;
+
+    @Autowired
+    FileStorageService fileStorageService;
 
 
     @RequestMapping(value = "/upload-picture", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -41,6 +46,18 @@ public class PictureController {
     public APIResponseDTO addNewPicture(@RequestParam("file") MultipartFile file, @RequestParam("idLocation") Long idLocation) throws IOException {
         return new APIResponseDTO(200,"Succesd", pictureService.storeFile(file, idLocation));
 
+    }
+
+    @PostMapping("/api/uploadFile")
+    public String uploadFile(@RequestParam("file") MultipartFile file) {
+        String fileName = fileStorageService.storeFile(file);
+
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/images/")
+                .path(fileName)
+                .toUriString();
+
+        return fileName + " " +  fileDownloadUri + " " + file.getContentType() + " " + file.getSize();
     }
 
 
