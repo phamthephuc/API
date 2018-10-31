@@ -59,6 +59,7 @@ public class FileStorageService {
         try {
             Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
             Resource resource = new UrlResource(filePath.toUri());
+            System.out.println(resource.toString());
             if(resource.exists()) {
                 return resource;
             } else {
