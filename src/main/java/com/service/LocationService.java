@@ -2,11 +2,15 @@ package com.service;
 
 import com.dto.LocationDTO;
 import com.dto.LocationProfileDTO;
+import com.dto.PageLocationDTO;
 import com.dto.TypeResponseDTO;
 import com.entity.*;
 import com.model.LocationRequest;
 import com.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,6 +19,9 @@ import java.util.List;
 
 @Service
 public class LocationService {
+
+    private static final int PAGE_SIZE = 2;
+
     @Autowired
     LocationRepository locationRepository;
 
@@ -43,6 +50,28 @@ public class LocationService {
     UsersRepository usersRepository;
 
 
+    public PageLocationDTO findAllLocationPagination(int currentPage) {
+        PageRequest pageRequest = new PageRequest(currentPage - 1, PAGE_SIZE, Sort.Direction.DESC,"id");
+        Page<Location> pageLocation = locationRepository.findAll(pageRequest);
+        return getPageLocationDTOFromPageLocation(pageLocation);
+    }
+
+    public PageLocationDTO getPageLocationDTOFromPageLocation(Page<Location> pageLocation) {
+        List<Location> listLocation = pageLocation.getContent();
+        List<LocationProfileDTO> listLocationProfile = getAllLocationProfileDTOWithLocation(listLocation);
+        PageLocationDTO pageLocationDTO = new PageLocationDTO();
+        pageLocationDTO.setCurrentPage(pageLocation.getNumber() + 1);
+        pageLocationDTO.setSumPage(pageLocation.getTotalPages());
+        pageLocationDTO.setListLocationProfieDTO(listLocationProfile);
+        return pageLocationDTO;
+    }
+
+    public PageLocationDTO findAllLocationInOneCategoryPagination(int currentPage, Long idCategory) {
+        System.out.println("crrPage : " + currentPage + " | idCate: " + idCategory);
+        PageRequest pageRequest = new PageRequest(currentPage - 1, PAGE_SIZE, Sort.Direction.DESC,"id");
+        Page<Location> pageLocation = locationRepository.findAllByIdPlaceCategory(idCategory,pageRequest);
+        return getPageLocationDTOFromPageLocation(pageLocation);
+    }
 
     public List<LocationProfileDTO> findAllLocationRecommended(Long idUserRecommended, Long idUserRelative) {
         List<Location> listLocation = locationRepository.getLocationRecommend(idUserRecommended, idUserRelative);
