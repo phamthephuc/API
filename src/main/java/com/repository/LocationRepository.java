@@ -19,8 +19,6 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
 
     public Page<Location> findAllByIdPlaceCategory(Long id, Pageable pageable);
 
-    public Page<Location> findAllByIdPlaceCategory(Long id, Pageable pageable);
-
     public List<Location> findByIdPlaceCategory(Long id);
 
     @Query(value = "Select * from location where id_place_category = ?1 LIMIT(10);", nativeQuery = true)

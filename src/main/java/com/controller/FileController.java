@@ -33,11 +33,24 @@ public class FileController {
 
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/downloadFile/")
+                .path(fileName)
+                .toUriString();
+
+        return fileName + " " +  fileDownloadUri + " " + file.getContentType() + " " + file.getSize();
+    }
+
+    @PostMapping("/uploadFileNonLocation")
+    public String uploadFileNonLocation(@RequestParam("file") MultipartFile file) {
+        String fileName = fileStorageService.storeFile(file);
+
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")
                 .path(fileName)
                 .toUriString();
 
         return fileName + " " +  fileDownloadUri + " " + file.getContentType() + " " + file.getSize();
+
     }
 
 //    @PostMapping("/uploadMultipleFiles")
@@ -49,7 +62,7 @@ public class FileController {
 //    }
 //
     @GetMapping("/downloadFile/{fileName:.+}")
-    public ResponseEntity<byte[]> downloadFile(@PathVariable String fileName, HttpServletRequest request) throws IOException {
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) throws IOException {
         // Load file as Resource
         Resource resource = fileStorageService.loadFileAsResource(fileName);
         File fileImage = resource.getFile();
@@ -67,11 +80,11 @@ public class FileController {
             contentType = "application/octet-stream";
         }
 
-//        return ResponseEntity.ok()
-//                .contentType(MediaType.parseMediaType(contentType))
-//                .body(resource);
-        return  ResponseEntity.ok()
-                .contentType(MediaType.valueOf(FileTypeMap.getDefaultFileTypeMap().getContentType(fileImage)))
-                .body(Files.readAllBytes(fileImage.toPath()));
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(resource);
+//        return  ResponseEntity.ok()
+//                .contentType(MediaType.valueOf(FileTypeMap.getDefaultFileTypeMap().getContentType(fileImage)))
+//                .body(Files.readAllBytes(fileImage.toPath()));
     }
 }
