@@ -17,7 +17,7 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
             "where evaluation.id_user = ?1", nativeQuery = true)
     public List<Location> getAllLocationByUser(Long id);
 
-
+    public Page<Location> findAllByIdPlaceCategory(Long id, Pageable pageable);
 
     public Page<Location> findAllByIdPlaceCategory(Long id, Pageable pageable);
 

@@ -61,6 +61,24 @@ public class LocationController {
         return  new APIResponseDTO(200,"Success!",locationService.findAllLocation());
     }
 
+    @GetMapping(value = "/locations/{currentPage}")
+    @ApiResponses(value = {//
+            @ApiResponse(code = 400, message = "Something went wrong"), //
+            @ApiResponse(code = 403, message = "Access denied"), //
+            @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
+    public APIResponseDTO findAllLocationPagination(@PathVariable int currentPage){
+        return  new APIResponseDTO(200,"Success!",locationService.findAllLocationPagination(currentPage));
+    }
+
+    @GetMapping(value = "/locations/{idCategory}/{currentPage}")
+    @ApiResponses(value = {//
+            @ApiResponse(code = 400, message = "Something went wrong"), //
+            @ApiResponse(code = 403, message = "Access denied"), //
+            @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
+    public APIResponseDTO findAllLocationInOneCategoryPagination(@PathVariable Long idCategory, @PathVariable int currentPage){
+        return  new APIResponseDTO(200,"Success!",locationService.findAllLocationInOneCategoryPagination(currentPage,idCategory));
+    }
+
     @GetMapping(value = "/locations/recommends/{idUser}")
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Something went wrong"), //
