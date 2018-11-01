@@ -48,17 +48,17 @@ public class PictureController {
 
     }
 
-    @PostMapping("/api/uploadFile")
-    public String uploadFile(@RequestParam("file") MultipartFile file) {
-        String fileName = fileStorageService.storeFile(file);
-
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/images/")
-                .path(fileName)
-                .toUriString();
-
-        return fileName + " " +  fileDownloadUri + " " + file.getContentType() + " " + file.getSize();
-    }
+//    @PostMapping("/api/uploadFile")
+//    public String uploadFile(@RequestParam("file") MultipartFile file) {
+//        String fileName = fileStorageService.storeFile(file);
+//
+//        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+//                .path("/images/")
+//                .path(fileName)
+//                .toUriString();
+//
+//        return fileName + " " +  fileDownloadUri + " " + file.getContentType() + " " + file.getSize();
+//    }
 
 
 }

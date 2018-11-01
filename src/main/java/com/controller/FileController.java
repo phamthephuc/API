@@ -27,9 +27,10 @@ public class FileController {
     private FileStorageService fileStorageService;
 
 
-    @PostMapping("/uploadFileAPI")
+        @PostMapping("/uploadFileAPI")
     public String uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("idLocation") Long idLocation) {
-        String fileName = fileStorageService.storeFile(file);
+        String fileName = fileStorageService.storeFile(file, idLocation);
+
 
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -40,18 +41,18 @@ public class FileController {
         return fileName + " " +  fileDownloadUri + " " + file.getContentType() + " " + file.getSize();
     }
 
-    @PostMapping("/uploadFileNonLocation")
-    public String uploadFileNonLocation(@RequestParam("file") MultipartFile file) {
-        String fileName = fileStorageService.storeFile(file);
-
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloadFile/")
-                .path(fileName)
-                .toUriString();
-
-        return fileName + " " +  fileDownloadUri + " " + file.getContentType() + " " + file.getSize();
-
-    }
+//    @PostMapping("/uploadFileNonLocation")
+//    public String uploadFileNonLocation(@RequestParam("file") MultipartFile file) {
+//        String fileName = fileStorageService.storeFile(file);
+//
+//        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+//                .path("/downloadFile/")
+//                .path(fileName)
+//                .toUriString();
+//
+//        return fileName + " " +  fileDownloadUri + " " + file.getContentType() + " " + file.getSize();
+//
+//    }
 
 //    @PostMapping("/uploadMultipleFiles")
 //    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
