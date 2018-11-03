@@ -28,6 +28,7 @@ public class PlaceCategoryController {
     }
 
     @GetMapping(value = "/place-type/{id}/place-categories")
+    @PreAuthorize("hasAuthority('user')")
     public  APIResponseDTO findAllPlaceCategoryOfOneType(@PathVariable Long id){
         return  new APIResponseDTO(200,"Success", placeCategoryService.findAllPlaceCategoryOfOneType(id));
     }
