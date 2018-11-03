@@ -3,7 +3,7 @@ package com.dto;
 import com.entity.Picture;
 import lombok.Data;
 
-import java.util.Date;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -11,25 +11,24 @@ import java.util.List;
 public class LocationProfileForTypeDTO {
     Long id;
     String name;
-    String introduction;
+    long numRating;
+    BigDecimal sumRating;
+
     List<Picture> pictureList;
 
-    private Long sumRating;
-    private int numRating;
-
-    public int getNumRating() {
+    public long getNumRating() {
         return numRating;
     }
 
-    public void setNumRating(int numRating) {
+    public void setNumRating(long numRating) {
         this.numRating = numRating;
     }
 
-    public void setSumRating(Long crrRating) {
+    public void setSumRating(BigDecimal crrRating) {
         this.sumRating = crrRating;
     }
 
-    public Long getSumRating() {
+    public BigDecimal getSumRating() {
         return sumRating;
     }
 
@@ -47,14 +46,6 @@ public class LocationProfileForTypeDTO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getIntroduction() {
-        return introduction;
-    }
-
-    public void setIntroduction(String introduction) {
-        this.introduction = introduction;
     }
 
     public List<Picture> getPictureList() {

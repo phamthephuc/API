@@ -27,9 +27,8 @@ import java.nio.file.Files;
 public class LocationController {
 
     @Autowired
-    RecommendService recommendService;
-    @Autowired
     LocationService locationService;
+
     @Autowired
     PictureService pictureService;
 
@@ -42,20 +41,6 @@ public class LocationController {
         return  new APIResponseDTO(200,"Success!",locationService.findAllLocationPagination(currentPage));
     }
 
-
-
-
-    @GetMapping(value = "/locations")
-    @ApiResponses(value = {//
-            @ApiResponse(code = 400, message = "Something went wrong"), //
-            @ApiResponse(code = 403, message = "Access denied"), //
-            @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
-    public APIResponseDTO findAll(){
-        return  new APIResponseDTO(200,"Success!",locationService.findAllLocation());
-    }
-
-
-
     @GetMapping(value = "/locations/{idCategory}/{currentPage}")
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Something went wrong"), //
@@ -63,16 +48,6 @@ public class LocationController {
             @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
     public APIResponseDTO findAllLocationInOneCategoryPagination(@PathVariable Long idCategory, @PathVariable int currentPage){
         return  new APIResponseDTO(200,"Success!",locationService.findAllLocationInOneCategoryPagination(currentPage,idCategory));
-    }
-
-
-    @GetMapping(value = "/locations/recommends/{idUser}")
-    @ApiResponses(value = {//
-            @ApiResponse(code = 400, message = "Something went wrong"), //
-            @ApiResponse(code = 403, message = "Access denied"), //
-            @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
-    public APIResponseDTO findRecommend(@PathVariable Long idUser){
-        return  new APIResponseDTO(200,"Success!",recommendService.getListLocationProfileDTORecommend(idUser));
     }
 
     @RequestMapping(value = "/uploadFile", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -160,7 +135,7 @@ public class LocationController {
     }
 
     @DeleteMapping(value = "/location/{id}")
-    public APIResponseDTO deleteLocation(@PathVariable long id) {
+    public APIResponseDTO deleteLocation(@PathVariable Long id) {
         locationService.deleteLocation(id);
         return  new APIResponseDTO(200,"Deleted!", null);
 

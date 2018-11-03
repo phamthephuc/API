@@ -2,6 +2,7 @@ package com.service;
 
 import com.dto.CategoryResponseDTO;
 import com.dto.LocationProfileDTO;
+import com.dto.LocationProfileForTypeDTO;
 import com.entity.PlaceCategory;
 import com.repository.PlaceCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,11 +45,21 @@ public class PlaceCategoryService {
         placeCategoryRepository.deleteById(id);
     }
 
+//    public ArrayList<CategoryResponseDTO> findAllCategoryDetailOfOneType(Long id) {
+//        ArrayList<CategoryResponseDTO> listCTDTO = new ArrayList<>();
+//        List<PlaceCategory> listPlaceCategoty = findAllPlaceCategoryOfOneType(id);
+//        for(PlaceCategory placeCategory : listPlaceCategoty) {
+//            List<LocationProfileDTO> listLocationOfOneCategory = locationService.findTop10LocationProfileByCategoryId(placeCategory.getId());
+//            listCTDTO.add(new CategoryResponseDTO(placeCategory.getId(),placeCategory.getName(),listLocationOfOneCategory));
+//        }
+//        return listCTDTO;
+//    }
+
     public ArrayList<CategoryResponseDTO> findAllCategoryDetailOfOneType(Long id) {
         ArrayList<CategoryResponseDTO> listCTDTO = new ArrayList<>();
         List<PlaceCategory> listPlaceCategoty = findAllPlaceCategoryOfOneType(id);
         for(PlaceCategory placeCategory : listPlaceCategoty) {
-            List<LocationProfileDTO> listLocationOfOneCategory = locationService.findTop10LocationProfileByCategoryId(placeCategory.getId());
+            List<LocationProfileForTypeDTO> listLocationOfOneCategory = locationService.findTop10LocationProfileByCategoryId(placeCategory.getId());
             listCTDTO.add(new CategoryResponseDTO(placeCategory.getId(),placeCategory.getName(),listLocationOfOneCategory));
         }
         return listCTDTO;
