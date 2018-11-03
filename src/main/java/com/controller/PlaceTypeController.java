@@ -20,7 +20,6 @@ public class PlaceTypeController {
     @Autowired
     PlaceTypeService placeTypeService;
 
-//    @CrossOrigin(origins = "http://domain2.com")gi
     @GetMapping( value = "/place-types")
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Something went wrong"), //
@@ -35,7 +34,7 @@ public class PlaceTypeController {
         return  new APIResponseDTO(200,"Success!",placeTypeService.findById(id));
     }
 
-    @GetMapping(value = "app/place-type/{id}")
+    @GetMapping(value = "/app/place-type/{id}")
     public  APIResponseDTO getPlaceTypeForApp( @PathVariable Long id){
         return  new APIResponseDTO(200,"Success!",placeTypeService.findTypeResponseDTOByIdType(id));
     }
@@ -62,4 +61,5 @@ public class PlaceTypeController {
         placeTypeService.deleteById(id);
         return  new APIResponseDTO(201,"Deleted!",null);
     }
+
 }

@@ -43,9 +43,9 @@ public class PlaceTypeService {
     }
 
     public TypeResponseDTO findTypeResponseDTOByIdType(Long idType) {
-        LocationProfileForTypeDTO locationProfileDTOLastest = locationService.findLastestLocationByIdType(idType);
+        LocationProfileForTypeDTO locationProfileForTypeDTO = locationService.findLastestLocationByIdType(idType);
         ArrayList<CategoryResponseDTO> listCRDTO = placeCategoryService.findAllCategoryDetailOfOneType(idType);
-        return new TypeResponseDTO(locationProfileDTOLastest,listCRDTO);
+        return new TypeResponseDTO(locationProfileForTypeDTO,listCRDTO);
     }
 
 }

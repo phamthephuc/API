@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 @RestController
+@CrossOrigin(origins = "*", maxAge = 1800)
 public class StatusController {
     @Autowired
     StatusService statusService;

@@ -45,6 +45,16 @@ public class PlaceCategoryService {
         placeCategoryRepository.deleteById(id);
     }
 
+//    public ArrayList<CategoryResponseDTO> findAllCategoryDetailOfOneType(Long id) {
+//        ArrayList<CategoryResponseDTO> listCTDTO = new ArrayList<>();
+//        List<PlaceCategory> listPlaceCategoty = findAllPlaceCategoryOfOneType(id);
+//        for(PlaceCategory placeCategory : listPlaceCategoty) {
+//            List<LocationProfileDTO> listLocationOfOneCategory = locationService.findTop10LocationProfileByCategoryId(placeCategory.getId());
+//            listCTDTO.add(new CategoryResponseDTO(placeCategory.getId(),placeCategory.getName(),listLocationOfOneCategory));
+//        }
+//        return listCTDTO;
+//    }
+
     public ArrayList<CategoryResponseDTO> findAllCategoryDetailOfOneType(Long id) {
         ArrayList<CategoryResponseDTO> listCTDTO = new ArrayList<>();
         List<PlaceCategory> listPlaceCategoty = findAllPlaceCategoryOfOneType(id);

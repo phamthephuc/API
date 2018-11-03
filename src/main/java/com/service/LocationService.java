@@ -1,20 +1,28 @@
 package com.service;
 
-import com.dto.LocationDTO;
-import com.dto.LocationProfileDTO;
-import com.dto.LocationProfileForTypeDTO;
+import com.dto.*;
 import com.entity.*;
 import com.model.LocationRequest;
 import com.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Service
 public class LocationService {
+
+    private static final int PAGE_SIZE = 2;
+
+    @Autowired
+    EvaluationRepository evaluationRepository;
+
     @Autowired
     LocationRepository locationRepository;
 
@@ -43,6 +51,28 @@ public class LocationService {
     UsersRepository usersRepository;
 
 
+    public PageLocationDTO findAllLocationPagination(int currentPage) {
+        PageRequest pageRequest = new PageRequest(currentPage - 1, PAGE_SIZE, Sort.Direction.DESC,"id");
+        Page<Location> pageLocation = locationRepository.findAll(pageRequest);
+        return getPageLocationDTOFromPageLocation(pageLocation);
+    }
+
+    public PageLocationDTO getPageLocationDTOFromPageLocation(Page<Location> pageLocation) {
+        List<Location> listLocation = pageLocation.getContent();
+        List<LocationProfileDTO> listLocationProfile = getAllLocationProfileDTOWithLocation(listLocation);
+        PageLocationDTO pageLocationDTO = new PageLocationDTO();
+        pageLocationDTO.setCurrentPage(pageLocation.getNumber() + 1);
+        pageLocationDTO.setSumPage(pageLocation.getTotalPages());
+        pageLocationDTO.setListLocationProfieDTO(listLocationProfile);
+        return pageLocationDTO;
+    }
+
+    public PageLocationDTO findAllLocationInOneCategoryPagination(int currentPage, Long idCategory) {
+        System.out.println("crrPage : " + currentPage + " | idCate: " + idCategory);
+        PageRequest pageRequest = new PageRequest(currentPage - 1, PAGE_SIZE, Sort.Direction.DESC,"id");
+        Page<Location> pageLocation = locationRepository.findAllByIdPlaceCategory(idCategory,pageRequest);
+        return getPageLocationDTOFromPageLocation(pageLocation);
+    }
 
     public List<LocationProfileDTO> findAllLocationRecommended(Long idUserRecommended, Long idUserRelative) {
         List<Location> listLocation = locationRepository.getLocationRecommend(idUserRecommended, idUserRelative);
@@ -138,15 +168,6 @@ public class LocationService {
         return listLocationDTO;
     }
 
-    public List<LocationProfileForTypeDTO> getAllLocationProfileForTypeDTOWithLocation(List<Location> listLocation) {
-        List<LocationProfileForTypeDTO> listLocationDTO = new ArrayList<LocationProfileForTypeDTO>();
-        for (Location location : listLocation){
-            LocationProfileForTypeDTO locationProfileDTO = getLocationProfileForTypeDTOWithLocation(location);
-            listLocationDTO.add(locationProfileDTO);
-        }
-        return listLocationDTO;
-    }
-
     public LocationProfileDTO getLocationProfileDTOWithLocation(Location location) {
 
             LocationProfileDTO locationProfileDTO = new LocationProfileDTO();
@@ -185,35 +206,38 @@ public class LocationService {
         return locationProfileDTO;
     }
 
-    public LocationProfileForTypeDTO getLocationProfileForTypeDTOWithLocation(Location location) {
-        LocationProfileForTypeDTO locationProfileDTO = new LocationProfileForTypeDTO();
-        locationProfileDTO.setId(location.getId());
-        locationProfileDTO.setName(location.getName());
-        locationProfileDTO.setIntroduction(location.getIntroduction());
-        ArrayList<Picture> pictureOfLocation = pictureRepository.findByIdLocation(location.getId());
-        locationProfileDTO.setPictureList(pictureOfLocation);
-        return locationProfileDTO;
-    }
-
-
-
     public  List<LocationProfileDTO> findAllLocationProfileByCategoryId(Long id){
         List<Location> listLocation = locationRepository.findByIdPlaceCategory(id);
         return  getAllLocationProfileDTOWithLocation(listLocation);
     }
+
+//    public  List<LocationProfileDTO> findTop10LocationProfileByCategoryId(Long id){
+//        List<Location> listLocation = locationRepository.findTop10ByIdPlaceCategory(id);
+//        return  getAllLocationProfileDTOWithLocation(listLocation);
+//    }
 
     public  List<LocationProfileForTypeDTO> findTop10LocationProfileByCategoryId(Long id){
         List<Location> listLocation = locationRepository.findTop10ByIdPlaceCategory(id);
         return  getAllLocationProfileForTypeDTOWithLocation(listLocation);
     }
 
+    public List<LocationProfileForTypeDTO> getAllLocationProfileForTypeDTOWithLocation(List<Location> listLocation) {
+        List<LocationProfileForTypeDTO> listLocationDTO = new ArrayList<LocationProfileForTypeDTO>();
+        for (Location location : listLocation){
+            LocationProfileForTypeDTO locationProfileDTO = getLocationProfileForTypeDTOWithLocation(location);
+            listLocationDTO.add(locationProfileDTO);
+        }
+        return listLocationDTO;
+    }
+
+
     public  List<Location> findAllLocationOfUserEvaluation(Long id){
         return  locationRepository.getAllLocationByUser(id);
     }
 
-    public List<LocationProfileDTO> findAllLocation(){
+    public List<Location> findAllLocation(){
         List<Location> listLocations = (List<Location>) locationRepository.findAll();
-        return  getAllLocationProfileDTOWithLocation(listLocations);
+        return  listLocations;
     }
 
     public LocationProfileDTO findById(Long id){
@@ -221,10 +245,38 @@ public class LocationService {
         return  getLocationProfileDTOWithLocation(locationSelected);
     }
 
+//    public LocationProfileDTO findLastestLocationByIdType(Long idType){
+//        Location locationSelected =  locationRepository.findLastestLocationByIdType(idType);
+//        return  getLocationProfileDTOWithLocation(locationSelected);
+//    }
+
+
     public LocationProfileForTypeDTO findLastestLocationByIdType(Long idType){
         Location locationSelected =  locationRepository.findLastestLocationByIdType(idType);
         return  getLocationProfileForTypeDTOWithLocation(locationSelected);
     }
+
+    public LocationProfileForTypeDTO getLocationProfileForTypeDTOWithLocation(Location location) {
+        LocationProfileForTypeDTO locationProfileDTO = new LocationProfileForTypeDTO();
+        locationProfileDTO.setId(location.getId());
+        locationProfileDTO.setName(location.getName());
+
+        try {
+            locationProfileDTO.setSumRating(evaluationRepository.sumAllByIdLocation(location.getId()).get());
+            locationProfileDTO.setNumRating(evaluationRepository.countAllByIdLocation(location.getId()));
+        } catch (Exception e) {
+//            System.out.println(location.getId());
+//            e.printStackTrace();
+            locationProfileDTO.setNumRating(0);
+            locationProfileDTO.setSumRating(new BigDecimal(0));
+        }
+
+        ArrayList<Picture> pictureOfLocation = pictureRepository.findByIdLocation(location.getId());
+        locationProfileDTO.setPictureList(pictureOfLocation);
+        return locationProfileDTO;
+    }
+
+
 
     public  void createLocation(Location location ){
         locationRepository.save(location);
@@ -273,11 +325,55 @@ public class LocationService {
         return getLocationProfileDTOWithLocation(locationRepository.findLastestLocation());
     }
 
-    public void updateLocation(Location location){
+    public void updateLocation(Location location)
+    {
         locationRepository.save(location);
+    }
+
+    public void editLocation(LocationRequest locationRequest, Long idLocation){
+        Location location = new Location();
+        location.setName(locationRequest.getName());
+        location.setIntroduction(locationRequest.getIntroduction());
+        location.setCreatedDate(new Date());
+        location.setIdPlaceCategory(locationRequest.getIdPlaceCategory());
+        location.setIdStatus(locationRequest.getIdStatus());
+
+        Content content = new Content();
+        content.setDetail(locationRequest.getContent());
+        contentRepository.save(content);
+        Content content1 = contentRepository.findLastestContent();
+        System.out.print(content1.getId());
+        location.setIdContent(contentRepository.findLastestContent().getId());
+
+        Contact contact = new Contact();
+        contact.setEmail(locationRequest.getEmail());
+        contact.setPhone(locationRequest.getPhone());
+        contactRepository.save(contact);
+        location.setIdContact(contactRepository.findLastestContact().getId());
+
+        Address address = new Address();
+        address.setName(locationRequest.getAddress());
+        address.setLink(locationRequest.getAddress());
+        addressRepository.save(address);
+        location.setIdAddress(addressRepository.findLastestAddress().getId());
+
+        location.setIdUser((long) 1);
+        location.setIdDuration(locationRequest.getIdDuration());
+        location.setId(idLocation);
+        Location locationsaved = locationRepository.save(location);
     }
 
     public void deleteLocation(Long id){
         locationRepository.deleteById(id);
     }
+
+//    public TypeResponseDTO getAllLocationByPlaceTypeId(Long id){
+//
+//        TypeResponseDTO typeResponseDTO = new TypeResponseDTO();
+//        typeResponseDTO.setId(id);
+//        typeResponseDTO.setListCategoryResponse(new ArrayList<>());
+//
+//
+//       return new TypeResponseDTO();
+//    }
 }

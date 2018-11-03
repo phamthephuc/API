@@ -15,6 +15,10 @@ public class TypeResponseDTO {
         this.listCategoryResponse = listCategoryResponse;
     }
 
+    public TypeResponseDTO() {
+
+    }
+
     public LocationProfileForTypeDTO getTopLocationOfType() {
         return topLocationOfType;
     }
