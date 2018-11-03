@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,10 +22,7 @@ public class PlaceCategoryController {
     PlaceCategoryService placeCategoryService;
 
     @GetMapping(value = "/place-categories")
-    @ApiResponses(value = {//
-            @ApiResponse(code = 400, message = "Something went wrong"), //
-            @ApiResponse(code = 403, message = "Access denied"), //
-            @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
+    @PreAuthorize("hasAuthority('admin')")
     public APIResponseDTO findAll(){
         return  new APIResponseDTO(200,"Success!",placeCategoryService.findAllPlaceCategory());
     }
