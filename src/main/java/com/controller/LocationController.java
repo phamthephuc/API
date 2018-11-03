@@ -75,6 +75,12 @@ public class LocationController {
         return  new APIResponseDTO(200,"Success!",recommendService.getListLocationProfileDTORecommend(idUser));
     }
 
+    @GetMapping(value = "/new-locations")
+    public APIResponseDTO getNewLocations(){
+        return new APIResponseDTO(200,"Get All New Locations", locationService.getNewLocations());
+
+    }
+
     @RequestMapping(value = "/uploadFile", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
         File convertFile = new File("\resources\\images\\" + file.getOriginalFilename());

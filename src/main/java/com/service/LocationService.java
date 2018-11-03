@@ -346,4 +346,9 @@ public class LocationService {
     }
 
 
+    public List<LocationProfileDTO> getNewLocations() {
+        List<Location> listNewLocations =   locationRepository.getNewLocations();
+        List<LocationProfileDTO> newLocations = getAllLocationProfileDTOWithLocation(listNewLocations);
+        return newLocations;
+    }
 }
