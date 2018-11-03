@@ -1,9 +1,6 @@
 package com.service;
 
-import com.dto.CategoryResponseDTO;
-import com.dto.LocationDTO;
-import com.dto.LocationProfileDTO;
-import com.dto.TypeResponseDTO;
+import com.dto.*;
 import com.entity.Location;
 import com.entity.PlaceCategory;
 import com.entity.PlaceType;
@@ -46,9 +43,9 @@ public class PlaceTypeService {
     }
 
     public TypeResponseDTO findTypeResponseDTOByIdType(Long idType) {
-        LocationProfileDTO locationProfileDTOLastest = locationService.findLastestLocationByIdType(idType);
+        LocationProfileForTypeDTO locationProfileForTypeDTO = locationService.findLastestLocationByIdType(idType);
         ArrayList<CategoryResponseDTO> listCRDTO = placeCategoryService.findAllCategoryDetailOfOneType(idType);
-        return new TypeResponseDTO(locationProfileDTOLastest,listCRDTO);
+        return new TypeResponseDTO(locationProfileForTypeDTO,listCRDTO);
     }
 
 }
