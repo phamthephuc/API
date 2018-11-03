@@ -65,6 +65,7 @@ public class LocationController {
         return  new APIResponseDTO(200,"Success!",locationService.findAllLocationInOneCategoryPagination(currentPage,idCategory));
     }
 
+
     @GetMapping(value = "/locations/recommends/{idUser}")
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Something went wrong"), //
