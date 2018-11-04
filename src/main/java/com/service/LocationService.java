@@ -74,14 +74,19 @@ public class LocationService {
         return getPageLocationDTOFromPageLocation(pageLocation);
     }
 
-    public List<LocationProfileDTO> findAllLocationRecommended(Long idUserRecommended, Long idUserRelative) {
+    public List<LocationProfileForTypeDTO> findAllLocationRecommended(Long idUserRecommended, Long idUserRelative) {
         List<Location> listLocation = locationRepository.getLocationRecommend(idUserRecommended, idUserRelative);
-        return  getAllLocationProfileDTOWithLocation(listLocation);
+        return  getAllLocationProfileForTypeDTOWithLocation(listLocation);
     }
 
-    public List<LocationProfileDTO> findAllLocationRecommendedWithHeightScorce() {
+    public List<LocationProfileForTypeDTO> findTop10ByRating() {
+        List<Location> listLocation = locationRepository.getTop10ByRating();
+        return getAllLocationProfileForTypeDTOWithLocation(listLocation);
+    }
+
+    public List<LocationProfileForTypeDTO> findAllLocationRecommendedWithHeightScorce() {
         List<Location> listLocation = locationRepository.getLocationRecommendWithHeightScore();
-        return  getAllLocationProfileDTOWithLocation(listLocation);
+        return  getAllLocationProfileForTypeDTOWithLocation(listLocation);
     }
 
     public List<LocationDTO> getAllLocationDTOWithLocation(List<Location> listLocation) {

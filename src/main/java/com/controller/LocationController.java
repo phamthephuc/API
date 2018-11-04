@@ -156,10 +156,17 @@ public class LocationController {
         return new APIResponseDTO(200, "Success",locationService.findAllLocationOfUserEvaluation(id));
     }
 
+    @GetMapping(value = "app/location/top10")
+    public APIResponseDTO getLocationOfUserEvaluation(){
+        return new APIResponseDTO(200, "Success",locationService.findTop10ByRating());
+    }
+
     @GetMapping(value = "/type-place", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public APIResponseDTO getAllLocationByPlaceTypeId(@RequestParam("id") Long id) {
         TypeResponseDTO typeResponseDTO = new TypeResponseDTO();
 //        typeResponseDTO = locationService.....
         return  new APIResponseDTO();
     }
+
+
 }

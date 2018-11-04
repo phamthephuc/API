@@ -2,6 +2,7 @@ package com.service;
 
 
 import com.dto.LocationProfileDTO;
+import com.dto.LocationProfileForTypeDTO;
 import com.entity.Evaluation;
 import com.entity.Users;
 import com.repository.UsersRepository;
@@ -22,7 +23,7 @@ public class RecommendService {
     EvaluationService evaluationService;
 
 
-    public List<LocationProfileDTO> getListLocationProfileDTORecommend(Long idUser) {
+    public List<LocationProfileForTypeDTO> getListLocationProfileDTORecommend(Long idUser) {
         List<Evaluation> listEvaluationOfUser = evaluationService.findAllEvaluationByIdUser(idUser);
 
         if(listEvaluationOfUser.size() == 0) {
