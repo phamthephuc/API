@@ -325,7 +325,7 @@ public class LocationService {
         locationRepository.save(location);
     }
 
-    public void editLocation(LocationRequest locationRequest, Long idLocation){
+    public LocationProfileDTO editLocation(LocationRequest locationRequest, Long idLocation){
         Location location = new Location();
         location.setName(locationRequest.getName());
         location.setIntroduction(locationRequest.getIntroduction());
@@ -356,6 +356,7 @@ public class LocationService {
         location.setIdDuration(locationRequest.getIdDuration());
         location.setId(idLocation);
         Location locationsaved = locationRepository.save(location);
+        return getLocationProfileDTOWithLocation(locationsaved);
     }
 
 //    public TypeResponseDTO getAllLocationByPlaceTypeId(Long id){

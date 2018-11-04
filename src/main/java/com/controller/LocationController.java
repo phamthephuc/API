@@ -119,8 +119,7 @@ public class LocationController {
         LocationProfileDTO locationOld = locationService.findById(idLocation);
         if (locationOld == null ) return new APIResponseDTO(500, "Not existed", null);
         else {
-            locationService.editLocation(locationRequest, idLocation);
-            return  new APIResponseDTO(200, "Edited", null);
+            return  new APIResponseDTO(200, "Edited", locationService.editLocation(locationRequest, idLocation));
 
         }
 
