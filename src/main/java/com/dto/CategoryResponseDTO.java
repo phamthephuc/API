@@ -11,9 +11,9 @@ import java.util.List;
 public class CategoryResponseDTO {
     private Long id;
     private String name;
-    private List<LocationProfileDTO> listLocationOfCategory;
+    private List<LocationProfileForTypeDTO> listLocationOfCategory;
 
-    public CategoryResponseDTO(Long id, String name, List<LocationProfileDTO> listLocationOfCategory) {
+    public CategoryResponseDTO(Long id, String name, List<LocationProfileForTypeDTO> listLocationOfCategory) {
         this.id = id;
         this.name = name;
         this.listLocationOfCategory = listLocationOfCategory;
@@ -35,11 +35,11 @@ public class CategoryResponseDTO {
         this.name = name;
     }
 
-    public List<LocationProfileDTO> getListLocationOfCategory() {
+    public List<LocationProfileForTypeDTO> getListLocationOfCategory() {
         return listLocationOfCategory;
     }
 
-    public void setListLocationOfCategory(List<LocationProfileDTO> listLocationOfCategory) {
+    public void setListLocationOfCategory(List<LocationProfileForTypeDTO> listLocationOfCategory) {
         this.listLocationOfCategory = listLocationOfCategory;
     }
 }

@@ -7,10 +7,10 @@ import java.util.ArrayList;
 @Data
 
 public class TypeResponseDTO {
-    private LocationProfileDTO topLocationOfType;
+    private LocationProfileForTypeDTO topLocationOfType;
     private ArrayList<CategoryResponseDTO> listCategoryResponse;
 
-    public TypeResponseDTO(LocationProfileDTO topLocationOfType, ArrayList<CategoryResponseDTO> listCategoryResponse) {
+    public TypeResponseDTO(LocationProfileForTypeDTO topLocationOfType, ArrayList<CategoryResponseDTO> listCategoryResponse) {
         this.topLocationOfType = topLocationOfType;
         this.listCategoryResponse = listCategoryResponse;
     }
@@ -19,11 +19,11 @@ public class TypeResponseDTO {
 
     }
 
-    public LocationProfileDTO getTopLocationOfType() {
+    public LocationProfileForTypeDTO getTopLocationOfType() {
         return topLocationOfType;
     }
 
-    public void setTopLocationOfType(LocationProfileDTO topLocationOfType) {
+    public void setTopLocationOfType(LocationProfileForTypeDTO topLocationOfType) {
         this.topLocationOfType = topLocationOfType;
     }
 

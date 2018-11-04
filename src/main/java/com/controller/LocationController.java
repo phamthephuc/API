@@ -27,9 +27,8 @@ import java.nio.file.Files;
 public class LocationController {
 
     @Autowired
-    RecommendService recommendService;
-    @Autowired
     LocationService locationService;
+
     @Autowired
     PictureService pictureService;
 
@@ -41,20 +40,6 @@ public class LocationController {
     public APIResponseDTO findAllLocationPagination(@PathVariable int currentPage){
         return  new APIResponseDTO(200,"Success!",locationService.findAllLocationPagination(currentPage));
     }
-
-
-
-
-    @GetMapping(value = "/locations")
-    @ApiResponses(value = {//
-            @ApiResponse(code = 400, message = "Something went wrong"), //
-            @ApiResponse(code = 403, message = "Access denied"), //
-            @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
-    public APIResponseDTO findAll(){
-        return  new APIResponseDTO(200,"Success!",locationService.findAllLocation());
-    }
-
-
 
     @GetMapping(value = "/locations/{idCategory}/{currentPage}")
     @ApiResponses(value = {//
@@ -80,6 +65,7 @@ public class LocationController {
         return new APIResponseDTO(200,"Get All New Locations", locationService.getNewLocations());
 
     }
+
 
     @RequestMapping(value = "/uploadFile", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
@@ -150,8 +136,7 @@ public class LocationController {
         LocationProfileDTO locationOld = locationService.findById(idLocation);
         if (locationOld == null ) return new APIResponseDTO(500, "Not existed", null);
         else {
-            locationService.editLocation(locationRequest, idLocation);
-            return  new APIResponseDTO(200, "Edited", null);
+            return  new APIResponseDTO(200, "Edited", locationService.editLocation(locationRequest, idLocation));
 
         }
 
@@ -166,7 +151,7 @@ public class LocationController {
     }
 
     @DeleteMapping(value = "/location/{id}")
-    public APIResponseDTO deleteLocation(@PathVariable long id) {
+    public APIResponseDTO deleteLocation(@PathVariable Long id) {
         locationService.deleteLocation(id);
         return  new APIResponseDTO(200,"Deleted!", null);
 

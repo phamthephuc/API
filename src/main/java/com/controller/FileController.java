@@ -1,5 +1,6 @@
 package com.controller;
 
+import com.dto.APIResponseDTO;
 import com.service.FileStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,19 +28,21 @@ public class FileController {
     private FileStorageService fileStorageService;
 
 
-        @PostMapping("/uploadFileAPI")
-    public String uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("idLocation") Long idLocation) {
+    @PostMapping("/api/upload-image-for-location")
+    public APIResponseDTO uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("idLocation") Long idLocation) {
         String fileName = fileStorageService.storeFile(file, idLocation);
 
 
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path("/downloadFile/")
+                .path("/downloadFile/")
                 .path(fileName)
                 .toUriString();
 
-        return fileName + " " +  fileDownloadUri + " " + file.getContentType() + " " + file.getSize();
+        String responInfor =  fileName + " " +  fileDownloadUri + " " + file.getContentType() + " " + file.getSize();
+        return new APIResponseDTO(200,"Created!", responInfor );
     }
+
 
 //    @PostMapping("/uploadFileNonLocation")
 //    public String uploadFileNonLocation(@RequestParam("file") MultipartFile file) {
@@ -54,7 +57,7 @@ public class FileController {
 //
 //    }
 
-//    @PostMapping("/uploadMultipleFiles")
+    //    @PostMapping("/uploadMultipleFiles")
 //    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
 //        return Arrays.asList(files)
 //                .stream()
