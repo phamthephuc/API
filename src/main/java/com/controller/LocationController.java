@@ -32,6 +32,9 @@ public class LocationController {
     @Autowired
     PictureService pictureService;
 
+    @Autowired
+    RecommendService recommendService;
+
     @GetMapping(value = "/locations/{currentPage}")
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Something went wrong"), //
@@ -51,14 +54,14 @@ public class LocationController {
     }
 
 
-    @GetMapping(value = "/locations/recommends/{idUser}")
-    @ApiResponses(value = {//
-            @ApiResponse(code = 400, message = "Something went wrong"), //
-            @ApiResponse(code = 403, message = "Access denied"), //
-            @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
-    public APIResponseDTO findRecommend(@PathVariable Long idUser){
-        return  new APIResponseDTO(200,"Success!",recommendService.getListLocationProfileDTORecommend(idUser));
-    }
+//    @GetMapping(value = "/locations/recommends/{idUser}")
+//    @ApiResponses(value = {//
+//            @ApiResponse(code = 400, message = "Something went wrong"), //
+//            @ApiResponse(code = 403, message = "Access denied"), //
+//            @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
+//    public APIResponseDTO findRecommend(@PathVariable Long idUser){
+//        return  new APIResponseDTO(200,"Success!",recommendService.getListLocationProfileDTORecommend(idUser));
+//    }
 
     @GetMapping(value = "/new-locations")
     public APIResponseDTO getNewLocations(){
