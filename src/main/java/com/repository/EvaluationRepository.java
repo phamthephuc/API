@@ -20,4 +20,6 @@ public interface EvaluationRepository extends CrudRepository<Evaluation, Long> {
 
     @Query(value = "select SUM(score) from evaluation WHERE id_location = ?1", nativeQuery = true)
     public Optional<BigDecimal> sumAllByIdLocation(Long idLocation);
+
+
 }
