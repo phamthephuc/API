@@ -1,5 +1,6 @@
 package com.repository;
 
+import com.dto.LocationProfileDTO;
 import com.entity.Location;
 import com.entity.Users;
 import org.springframework.data.domain.Page;
@@ -36,4 +37,7 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
     @Query(value = "SELECT location.* from location INNER JOIN place_category ON location.id_place_category = place_category.id INNER JOIN place_type ON place_category.id_place_type = place_type.id WHERE place_type.id = ?1 order BY location.id DESC limit(1);", nativeQuery = true)
     public Location findLastestLocationByIdType(Long idType);
 
+
+    @Query(value = "SELECT location.* from location ORDER by created_date DESC limit (10);", nativeQuery = true)
+    List<Location> getNewLocations();
 }
