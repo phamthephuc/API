@@ -63,7 +63,7 @@ public class LocationController {
 //        return  new APIResponseDTO(200,"Success!",recommendService.getListLocationProfileDTORecommend(idUser));
 //    }
 
-    @GetMapping(value = "/new-locations")
+    @GetMapping(value = "/top-10-new-locations")
     public APIResponseDTO getNewLocations(){
         return new APIResponseDTO(200,"Get All New Locations", locationService.getNewLocations());
 
