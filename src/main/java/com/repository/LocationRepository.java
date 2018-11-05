@@ -18,6 +18,10 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
             "where evaluation.id_user = ?1", nativeQuery = true)
     public List<Location> getAllLocationByUser(Long id);
 
+    @Query(value = "select location.* FROM location INNER JOIN (select e.id_location from evaluation AS e group by id_location ORDER BY AVG(score) DESC LIMIT 10) AS l ON location.id = l.id_location", nativeQuery = true)
+    public List<Location> getTop10ByRating();
+
+
     public Page<Location> findAllByIdPlaceCategory(Long id, Pageable pageable);
 
     public List<Location> findByIdPlaceCategory(Long id);

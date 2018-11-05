@@ -69,14 +69,27 @@ public class LocationService {
         return pageLocationDTO;
     }
 
-    public List<LocationProfileDTO> findAllLocationRecommended(Long idUserRecommended, Long idUserRelative) {
-        List<Location> listLocation = locationRepository.getLocationRecommend(idUserRecommended, idUserRelative);
-        return  getAllLocationProfileDTOWithLocation(listLocation);
+    public PageLocationDTO findAllLocationInOneCategoryPagination(int currentPage, Long idCategory) {
+        System.out.println("crrPage : " + currentPage + " | idCate: " + idCategory);
+        PageRequest pageRequest = new PageRequest(currentPage - 1, PAGE_SIZE, Sort.Direction.DESC,"id");
+        Page<Location> pageLocation = locationRepository.findAllByIdPlaceCategory(idCategory,pageRequest);
+        return getPageLocationDTOFromPageLocation(pageLocation);
     }
 
-    public List<LocationProfileDTO> findAllLocationRecommendedWithHeightScorce() {
+    public List<LocationProfileForTypeDTO> findAllLocationRecommended(Long idUserRecommended, Long idUserRelative) {
+
+        List<Location> listLocation = locationRepository.getLocationRecommend(idUserRecommended, idUserRelative);
+        return  getAllLocationProfileForTypeDTOWithLocation(listLocation);
+    }
+
+    public List<LocationProfileForTypeDTO> findTop10ByRating() {
+        List<Location> listLocation = locationRepository.getTop10ByRating();
+        return getAllLocationProfileForTypeDTOWithLocation(listLocation);
+    }
+
+    public List<LocationProfileForTypeDTO> findAllLocationRecommendedWithHeightScorce() {
         List<Location> listLocation = locationRepository.getLocationRecommendWithHeightScore();
-        return  getAllLocationProfileDTOWithLocation(listLocation);
+        return  getAllLocationProfileForTypeDTOWithLocation(listLocation);
     }
 
     public List<LocationDTO> getAllLocationDTOWithLocation(List<Location> listLocation) {
