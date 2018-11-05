@@ -35,4 +35,8 @@ public class CommentService {
     public void deleteComment(Long id){
         commentRepository.deleteById(id);
     }
+
+    public List<Comment> getTop10CommentOfLocation(Long idLocation){
+        return  commentRepository.findTop10ByIdLocation(idLocation);
+    }
 }

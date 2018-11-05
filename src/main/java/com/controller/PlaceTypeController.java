@@ -3,7 +3,6 @@ package com.controller;
 import com.dto.APIResponseDTO;
 import com.entity.PlaceType;
 import com.service.PlaceTypeService;
-import com.sun.org.apache.xpath.internal.operations.String;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
