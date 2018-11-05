@@ -69,12 +69,7 @@ public class LocationService {
         return pageLocationDTO;
     }
 
-    public PageLocationDTO findAllLocationInOneCategoryPagination(int currentPage, Long idCategory) {
-        System.out.println("crrPage : " + currentPage + " | idCate: " + idCategory);
-        PageRequest pageRequest = new PageRequest(currentPage - 1, PAGE_SIZE, Sort.Direction.DESC,"id");
-        Page<Location> pageLocation = locationRepository.findAllByIdPlaceCategory(idCategory,pageRequest);
-        return getPageLocationDTOFromPageLocation(pageLocation);
-    }
+
 
     public List<LocationProfileForTypeDTO> findAllLocationRecommended(Long idUserRecommended, Long idUserRelative) {
 

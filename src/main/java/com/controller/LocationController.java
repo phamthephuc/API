@@ -165,7 +165,7 @@ public class LocationController {
         return new APIResponseDTO(200, "Success",locationService.findAllLocationOfUserEvaluation(id));
     }
 
-    @GetMapping(value = "app/location/top10")
+    @GetMapping(value = "/app/location/top-10-highlight")
     public APIResponseDTO getLocationOfUserEvaluation(){
         return new APIResponseDTO(200, "Success",locationService.findTop10ByRating());
     }
