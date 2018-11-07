@@ -2,9 +2,11 @@ package com.exception;
 
 import com.dto.APIResponseDTO;
 import javassist.tools.web.BadHttpRequest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,5 +60,9 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     }
   }
 
+  @Override
+  protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    return new ResponseEntity<>(new APIResponseDTO(400, "Validation Failed", ex.getBindingResult().getFieldError().getDefaultMessage()), HttpStatus.BAD_REQUEST);
+  }
 
 }
