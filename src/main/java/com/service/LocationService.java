@@ -1,5 +1,9 @@
 package com.service;
 
+import com.dto.LocationDTO;
+import com.dto.LocationProfileDTO;
+import com.dto.PageLocationDTO;
+import com.dto.TypeResponseDTO;
 import com.dto.*;
 import com.entity.*;
 import com.model.LocationRequest;
@@ -21,7 +25,13 @@ public class LocationService {
     private static final int PAGE_SIZE = 2;
 
     @Autowired
+    EvaluationService evaluationService;
+
+    @Autowired
     EvaluationRepository evaluationRepository;
+
+    @Autowired
+    FavoriteRepository favoriteRepository;
 
     @Autowired
     LocationRepository locationRepository;
@@ -43,13 +53,11 @@ public class LocationService {
 
     @Autowired
     PlaceCategoryRepository placeCategoryRepository;
-
     @Autowired
     StatusRepository statusRepository;
 
     @Autowired
     UsersRepository usersRepository;
-
 
     public PageLocationDTO findAllLocationPagination(int currentPage) {
         PageRequest pageRequest = new PageRequest(currentPage - 1, PAGE_SIZE, Sort.Direction.DESC,"id");
@@ -57,7 +65,7 @@ public class LocationService {
         return getPageLocationDTOFromPageLocation(pageLocation);
     }
 
-    public PageLocationDTO getPageLocationDTOFromPageLocation(Page<Location> pageLocation) {
+    public PageLocationDTO getPageLocationDTOFromPageLocationDTO(Page<Location> pageLocation) {
         List<Location> listLocation = pageLocation.getContent();
         List<LocationProfileDTO> listLocationProfile = getAllLocationProfileDTOWithLocation(listLocation);
         PageLocationDTO pageLocationDTO = new PageLocationDTO();
@@ -67,14 +75,10 @@ public class LocationService {
         return pageLocationDTO;
     }
 
-    public PageLocationDTO findAllLocationInOneCategoryPagination(int currentPage, Long idCategory) {
-        System.out.println("crrPage : " + currentPage + " | idCate: " + idCategory);
-        PageRequest pageRequest = new PageRequest(currentPage - 1, PAGE_SIZE, Sort.Direction.DESC,"id");
-        Page<Location> pageLocation = locationRepository.findAllByIdPlaceCategory(idCategory,pageRequest);
-        return getPageLocationDTOFromPageLocation(pageLocation);
-    }
+
 
     public List<LocationProfileForTypeDTO> findAllLocationRecommended(Long idUserRecommended, Long idUserRelative) {
+
         List<Location> listLocation = locationRepository.getLocationRecommend(idUserRecommended, idUserRelative);
         return  getAllLocationProfileForTypeDTOWithLocation(listLocation);
     }
@@ -261,6 +265,55 @@ public class LocationService {
         return  getLocationProfileForTypeDTOWithLocation(locationSelected);
     }
 
+    public DetailLocationDTO findDetailLocationById(Long idLocation, Long idUser) {
+        Location location = locationRepository.findById(idLocation).orElse(new Location());
+        return getDetailLocationDTOFromLocation(location, idUser);
+    }
+
+    public DetailLocationDTO getDetailLocationDTOFromLocation(Location location, Long idUser) {
+        DetailLocationDTO detailLocationDTO = new DetailLocationDTO();
+        detailLocationDTO.setId(location.getId());
+        detailLocationDTO.setName(location.getName());
+        detailLocationDTO.setIntroduction(location.getIntroduction());
+
+//            Content content;
+        Content content = contentRepository.findById(location.getIdContent()).orElse(new Content());
+        detailLocationDTO.setContent(content.getDetail());
+
+//            Address address;
+        Address address = addressRepository.findById(location.getIdAddress()).orElse(new Address());
+        detailLocationDTO.setAddress(address.getName());
+        detailLocationDTO.setLatLng(address.getLink());
+//            Contact contact;
+        Contact contact = contactRepository.findById(location.getIdContact()).orElse(new Contact());
+        detailLocationDTO.setEmail(contact.getEmail());
+        detailLocationDTO.setPhone(contact.getPhone());
+
+//            List<Picture> pictureList;
+        ArrayList<Picture> pictureOfLocation = pictureRepository.findByIdLocation(location.getId());
+        detailLocationDTO.setPictureList(pictureOfLocation);
+
+
+        long numRating = evaluationRepository.countAllByIdLocation(location.getId());
+        detailLocationDTO.setNumRating(numRating);
+        if(numRating == 0) {
+            detailLocationDTO.setSumRating(new BigDecimal(0));
+        } else {
+            detailLocationDTO.setSumRating(evaluationRepository.sumAllByIdLocation(location.getId()).get());
+        }
+
+        Favorite favorite = favoriteRepository.findByIdUserAndIdLocation(idUser, location.getId());
+        if(favorite == null) {
+            detailLocationDTO.setFavorite(false);
+        } else {
+            detailLocationDTO.setFavorite(true);
+        }
+
+        detailLocationDTO.setEvaluationPaginationDTO(evaluationService.findAppReviewDTOPagination(location.getId(),1));
+
+        return detailLocationDTO;
+    }
+
     public LocationProfileForTypeDTO getLocationProfileForTypeDTOWithLocation(Location location) {
         LocationProfileForTypeDTO locationProfileDTO = new LocationProfileForTypeDTO();
         locationProfileDTO.setId(location.getId());
@@ -335,7 +388,7 @@ public class LocationService {
         locationRepository.save(location);
     }
 
-    public void editLocation(LocationRequest locationRequest, Long idLocation){
+    public LocationProfileDTO editLocation(LocationRequest locationRequest, Long idLocation){
         Location location = new Location();
         location.setName(locationRequest.getName());
         location.setIntroduction(locationRequest.getIntroduction());
@@ -366,6 +419,43 @@ public class LocationService {
         location.setIdDuration(locationRequest.getIdDuration());
         location.setId(idLocation);
         Location locationsaved = locationRepository.save(location);
+        return getLocationProfileDTOWithLocation(locationsaved);
+    }
+
+//    public TypeResponseDTO getAllLocationByPlaceTypeId(Long id){
+//
+//        TypeResponseDTO typeResponseDTO = new TypeResponseDTO();
+//        typeResponseDTO.setId(id);
+//        typeResponseDTO.setListCategoryResponse(new ArrayList<>());
+//
+//
+//       return new TypeResponseDTO();
+//    }
+
+
+
+    public PageLocationDTO getPageLocationDTOFromPageLocation(Page<Location> pageLocation) {
+        List<Location> listLocation = pageLocation.getContent();
+        List<LocationProfileDTO> listLocationProfile = getAllLocationProfileDTOWithLocation(listLocation);
+        PageLocationDTO pageLocationDTO = new PageLocationDTO();
+        pageLocationDTO.setCurrentPage(pageLocation.getNumber() + 1);
+        pageLocationDTO.setSumPage(pageLocation.getTotalPages());
+        pageLocationDTO.setListLocationProfieDTO(listLocationProfile);
+        return pageLocationDTO;
+    }
+
+    public PageLocationDTO findAllLocationInOneCategoryPagination(int currentPage, Long idCategory) {
+        System.out.println("crrPage : " + currentPage + " | idCate: " + idCategory);
+        PageRequest pageRequest = new PageRequest(currentPage - 1, PAGE_SIZE, Sort.Direction.DESC,"id");
+        Page<Location> pageLocation = locationRepository.findAllByIdPlaceCategory(idCategory,pageRequest);
+        return getPageLocationDTOFromPageLocation(pageLocation);
+    }
+
+
+    public List<LocationProfileForTypeDTO> getNewLocations() {
+        List<Location> listNewLocations =   locationRepository.getNewLocations();
+        List<LocationProfileForTypeDTO> newLocations = getAllLocationProfileForTypeDTOWithLocation(listNewLocations);
+        return newLocations;
     }
 
     public void deleteLocation(Long id){

@@ -1,8 +1,10 @@
 package com.service;
 
+import com.entity.Picture;
 import com.exception.FileStorageException;
 import com.exception.MyFileNotFoundException;
 import com.property.FileStorageProperties;
+import com.repository.PictureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -24,6 +26,9 @@ public class FileStorageService {
     private final Path fileStorageLocation;
 
     @Autowired
+    PictureRepository pictureRepository;
+
+    @Autowired
     public FileStorageService(FileStorageProperties fileStorageProperties) {
         this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
                 .toAbsolutePath().normalize();
@@ -35,7 +40,7 @@ public class FileStorageService {
         }
     }
 
-    public String storeFile(MultipartFile file) {
+    public String storeFile(MultipartFile file, Long idLocation) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
@@ -49,6 +54,11 @@ public class FileStorageService {
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
+            Picture picture = new Picture();
+            picture.setName(file.getOriginalFilename());
+            picture.setImage(file.getOriginalFilename());
+            picture.setIdLocation(idLocation);
+            pictureRepository.save(picture);
             return fileName;
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
@@ -59,6 +69,7 @@ public class FileStorageService {
         try {
             Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
             Resource resource = new UrlResource(filePath.toUri());
+            System.out.println(resource.toString());
             if(resource.exists()) {
                 return resource;
             } else {

@@ -26,4 +26,6 @@ public class RecommendController {
         return  new APIResponseDTO(200,"Success!",recommendService.getListLocationProfileDTORecommend(idUser));
     }
 
+
+
 }

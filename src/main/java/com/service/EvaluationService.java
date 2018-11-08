@@ -1,18 +1,27 @@
 package com.service;
 
+import com.dto.EvaluationDTO;
+import com.dto.EvaluationPaginationDTO;
 import com.entity.Evaluation;
-import com.entity.PlaceCategory;
 import com.repository.EvaluationRepository;
-import com.repository.PlaceCategoryRepository;
+import com.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class EvaluationService {
 
+    @Autowired
+    UsersRepository usersRepository;
+
+    public static final int PAGE_SIZE = 5;
     @Autowired
     EvaluationRepository evaluationRepository;
 
@@ -42,5 +51,40 @@ public class EvaluationService {
 
     public void deleteEvaluation(Long id){
         evaluationRepository.deleteById(id);
+    }
+
+    public EvaluationPaginationDTO findAppReviewDTOPagination(Long idLocation, int crrPage) {
+        PageRequest pageRequest = new PageRequest(crrPage - 1, PAGE_SIZE, Sort.Direction.DESC,"id");
+        Page<Evaluation> evaluationPage = evaluationRepository.findAllByIdLocation(idLocation,pageRequest);
+        return findAppReviewDTOFromEvaluation(evaluationPage);
+    }
+
+    public List<EvaluationDTO> getListEvaluationDTOFromListEvaluation(List<Evaluation> listEvaluation) {
+        List<EvaluationDTO> listEvaluationDTO = new ArrayList<>();
+        for (Evaluation evaluation : listEvaluation) {
+            EvaluationDTO evaluationDTO = getEvaluationDTOFromEvaluation(evaluation);
+            listEvaluationDTO.add(evaluationDTO);
+        }
+        return listEvaluationDTO;
+    }
+
+    public EvaluationDTO getEvaluationDTOFromEvaluation(Evaluation evaluation) {
+        EvaluationDTO evaluationDTO = new EvaluationDTO();
+        evaluationDTO.setContent(evaluation.getContent());
+        evaluationDTO.setDateReview(evaluation.getEvaluationDate());
+        evaluationDTO.setScore(evaluation.getScore());
+        String username = usersRepository.findById(evaluation.getId()).get().getUsername();
+        evaluationDTO.setNameUser(username);
+        return evaluationDTO;
+    }
+
+    public EvaluationPaginationDTO findAppReviewDTOFromEvaluation(Page<Evaluation> evaluationPage) {
+        EvaluationPaginationDTO evaluationPaginationDTO = new EvaluationPaginationDTO();
+        List<Evaluation> listEvaluation = evaluationPage.getContent();
+        List<EvaluationDTO> listEvaluationDTO = getListEvaluationDTOFromListEvaluation(listEvaluation);
+        evaluationPaginationDTO.setCrrPage(evaluationPage.getNumber() + 1);
+        evaluationPaginationDTO.setSumPage(evaluationPage.getTotalPages());
+        evaluationPaginationDTO.setListEvaluation(listEvaluationDTO);
+        return evaluationPaginationDTO;
     }
 }

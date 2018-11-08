@@ -32,6 +32,9 @@ public class LocationController {
     @Autowired
     PictureService pictureService;
 
+    @Autowired
+    RecommendService recommendService;
+
     @GetMapping(value = "/locations/{currentPage}")
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Something went wrong"), //
@@ -51,14 +54,21 @@ public class LocationController {
     }
 
 
-    @GetMapping(value = "/locations")
-    @ApiResponses(value = {//
-            @ApiResponse(code = 400, message = "Something went wrong"), //
-            @ApiResponse(code = 403, message = "Access denied"), //
-            @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
-    public APIResponseDTO findAll(){
-        return  new APIResponseDTO(200,"Success!",locationService.findAllLocation());
+//    @GetMapping(value = "/locations/recommends/{idUser}")
+//    @ApiResponses(value = {//
+//            @ApiResponse(code = 400, message = "Something went wrong"), //
+//            @ApiResponse(code = 403, message = "Access denied"), //
+//            @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
+//    public APIResponseDTO findRecommend(@PathVariable Long idUser){
+//        return  new APIResponseDTO(200,"Success!",recommendService.getListLocationProfileDTORecommend(idUser));
+//    }
+
+    @GetMapping(value = "/top-10-new-locations")
+    public APIResponseDTO getNewLocations(){
+        return new APIResponseDTO(200,"Get All New Locations", locationService.getNewLocations());
+
     }
+
 
     @RequestMapping(value = "/uploadFile", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
@@ -129,8 +139,7 @@ public class LocationController {
         LocationProfileDTO locationOld = locationService.findById(idLocation);
         if (locationOld == null ) return new APIResponseDTO(500, "Not existed", null);
         else {
-            locationService.editLocation(locationRequest, idLocation);
-            return  new APIResponseDTO(200, "Edited", null);
+            return  new APIResponseDTO(200, "Edited", locationService.editLocation(locationRequest, idLocation));
 
         }
 
@@ -145,7 +154,7 @@ public class LocationController {
     }
 
     @DeleteMapping(value = "/location/{id}")
-    public APIResponseDTO deleteLocation(@PathVariable long id) {
+    public APIResponseDTO deleteLocation(@PathVariable Long id) {
         locationService.deleteLocation(id);
         return  new APIResponseDTO(200,"Deleted!", null);
 
@@ -156,9 +165,16 @@ public class LocationController {
         return new APIResponseDTO(200, "Success",locationService.findAllLocationOfUserEvaluation(id));
     }
 
-    @GetMapping(value = "app/location/top10")
+    @GetMapping(value = "/app/location/top-10-highlight")
     public APIResponseDTO getLocationOfUserEvaluation(){
         return new APIResponseDTO(200, "Success",locationService.findTop10ByRating());
+    }
+
+    @GetMapping(value = "/app/location/{id}")
+    public APIResponseDTO getLocationOfUserEvaluation(@PathVariable Long id){
+        // tim ra User ơ day
+        Long idUser = 1L;
+        return new APIResponseDTO(200, "Success",locationService.findDetailLocationById(id,idUser));
     }
 
     @GetMapping(value = "/type-place", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -167,6 +183,8 @@ public class LocationController {
 //        typeResponseDTO = locationService.....
         return  new APIResponseDTO();
     }
+
+
 
 
 }
