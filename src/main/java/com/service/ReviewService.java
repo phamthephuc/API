@@ -27,15 +27,9 @@ public class ReviewService {
         evaluation.setIdUser(reviewDTO.getUserId());
         evaluation.setScore(reviewDTO.getNumberRating());
         evaluation.setIdLocation(reviewDTO.getLocationId());
+        evaluation.setContent(reviewDTO.getCommentContent());
+        evaluation.setEvaluationDate(new Date());
         Evaluation evaluationAdded = evaluationRepository.save(evaluation);
-
-        Comment comment = new Comment();
-        comment.setCommentedDate(new Date());
-        comment.setContent(reviewDTO.getCommentContent());
-        comment.setIdUser(reviewDTO.getUserId());
-        comment.setIdLocation(reviewDTO.getLocationId());
-        Comment commentAdded = commentRepository.save(comment);
-
         return null;
     }
 
