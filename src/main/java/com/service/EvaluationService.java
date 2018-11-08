@@ -3,6 +3,7 @@ package com.service;
 import com.dto.EvaluationDTO;
 import com.dto.EvaluationPaginationDTO;
 import com.entity.Evaluation;
+import com.entity.Users;
 import com.repository.EvaluationRepository;
 import com.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,8 +74,9 @@ public class EvaluationService {
         evaluationDTO.setContent(evaluation.getContent());
         evaluationDTO.setDateReview(evaluation.getEvaluationDate());
         evaluationDTO.setScore(evaluation.getScore());
-        String username = usersRepository.findById(evaluation.getId()).get().getUsername();
-        evaluationDTO.setNameUser(username);
+//        String username = usersRepository.findById(evaluation.getId()).get().getUsername();
+        Users usersCurrent = usersRepository.findById(evaluation.getIdUser()).orElse(new Users());
+        evaluationDTO.setNameUser(usersCurrent.getUsername());
         return evaluationDTO;
     }
 
