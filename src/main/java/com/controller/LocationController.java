@@ -184,6 +184,12 @@ public class LocationController {
         return  new APIResponseDTO();
     }
 
+    @DeleteMapping(value = "/api/delete-location/{idLocation}")
+    public APIResponseDTO deleteLocationById(@PathVariable Long idLocation){
+        locationService.deleteLocation(idLocation);
+        return new APIResponseDTO(200,"Deleted!",null);
+    }
+
 
 
 

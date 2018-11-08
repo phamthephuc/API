@@ -458,8 +458,15 @@ public class LocationService {
         return newLocations;
     }
 
-    public void deleteLocation(Long id){
-        locationRepository.deleteById(id);
+    public void deleteLocation(Long idLocation){
+        Location  location = locationRepository.findById(idLocation).orElse(new Location());
+        locationRepository.deleteById(idLocation);
+        addressRepository.deleteById(location.getIdAddress());
+        contactRepository.deleteById(location.getIdContact());
+        contentRepository.deleteById(location.getIdContent());
+        pictureRepository.deleteByIdLocation(idLocation);
+        evaluationRepository.deleteByIdLocation(idLocation);
+
     }
 
 //    public TypeResponseDTO getAllLocationByPlaceTypeId(Long id){
