@@ -25,4 +25,5 @@ public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
     public Optional<BigDecimal> sumAllByIdLocation(Long idLocation);
 
     public Page<Evaluation> findAllByIdLocation(Long idLocation, Pageable pageable);
+
 }
