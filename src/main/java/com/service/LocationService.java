@@ -25,7 +25,13 @@ public class LocationService {
     private static final int PAGE_SIZE = 2;
 
     @Autowired
+    EvaluationService evaluationService;
+
+    @Autowired
     EvaluationRepository evaluationRepository;
+
+    @Autowired
+    FavoriteRepository favoriteRepository;
 
     @Autowired
     LocationRepository locationRepository;
@@ -257,6 +263,55 @@ public class LocationService {
     public LocationProfileForTypeDTO findLastestLocationByIdType(Long idType){
         Location locationSelected =  locationRepository.findLastestLocationByIdType(idType);
         return  getLocationProfileForTypeDTOWithLocation(locationSelected);
+    }
+
+    public DetailLocationDTO findDetailLocationById(Long idLocation, Long idUser) {
+        Location location = locationRepository.findById(idLocation).orElse(new Location());
+        return getDetailLocationDTOFromLocation(location, idUser);
+    }
+
+    public DetailLocationDTO getDetailLocationDTOFromLocation(Location location, Long idUser) {
+        DetailLocationDTO detailLocationDTO = new DetailLocationDTO();
+        detailLocationDTO.setId(location.getId());
+        detailLocationDTO.setName(location.getName());
+        detailLocationDTO.setIntroduction(location.getIntroduction());
+
+//            Content content;
+        Content content = contentRepository.findById(location.getIdContent()).orElse(new Content());
+        detailLocationDTO.setContent(content.getDetail());
+
+//            Address address;
+        Address address = addressRepository.findById(location.getIdAddress()).orElse(new Address());
+        detailLocationDTO.setAddress(address.getName());
+        detailLocationDTO.setLatLng(address.getLink());
+//            Contact contact;
+        Contact contact = contactRepository.findById(location.getIdContact()).orElse(new Contact());
+        detailLocationDTO.setEmail(contact.getEmail());
+        detailLocationDTO.setPhone(contact.getPhone());
+
+//            List<Picture> pictureList;
+        ArrayList<Picture> pictureOfLocation = pictureRepository.findByIdLocation(location.getId());
+        detailLocationDTO.setPictureList(pictureOfLocation);
+
+
+        long numRating = evaluationRepository.countAllByIdLocation(location.getId());
+        detailLocationDTO.setNumRating(numRating);
+        if(numRating == 0) {
+            detailLocationDTO.setSumRating(new BigDecimal(0));
+        } else {
+            detailLocationDTO.setSumRating(evaluationRepository.sumAllByIdLocation(location.getId()).get());
+        }
+
+        Favorite favorite = favoriteRepository.findByIdUserAndIdLocation(idUser, location.getId());
+        if(favorite == null) {
+            detailLocationDTO.setFavorite(false);
+        } else {
+            detailLocationDTO.setFavorite(true);
+        }
+
+        detailLocationDTO.setEvaluationPaginationDTO(evaluationService.findAppReviewDTOPagination(location.getId(),1));
+
+        return detailLocationDTO;
     }
 
     public LocationProfileForTypeDTO getLocationProfileForTypeDTOWithLocation(Location location) {
