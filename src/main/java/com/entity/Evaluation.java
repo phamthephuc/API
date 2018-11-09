@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Date;
 
 @Entity
 @Data
@@ -17,6 +18,24 @@ public class Evaluation {
     Long score;
     Long idLocation;
     Long idUser;
+    String content;
+    Date evaluationDate;
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setEvaluationDate(Date evaluationDate) {
+        this.evaluationDate = evaluationDate;
+    }
+
+    public Date getEvaluationDate() {
+        return evaluationDate;
+    }
 
     public Long getId() {
         return id;

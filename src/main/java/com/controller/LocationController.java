@@ -170,12 +170,27 @@ public class LocationController {
         return new APIResponseDTO(200, "Success",locationService.findTop10ByRating());
     }
 
+    @GetMapping(value = "/app/location/{id}")
+    public APIResponseDTO getLocationOfUserEvaluation(@PathVariable Long id){
+        // tim ra User ơ day
+        Long idUser = 1L;
+        return new APIResponseDTO(200, "Success",locationService.findDetailLocationById(id,idUser));
+    }
+
     @GetMapping(value = "/type-place", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public APIResponseDTO getAllLocationByPlaceTypeId(@RequestParam("id") Long id) {
         TypeResponseDTO typeResponseDTO = new TypeResponseDTO();
 //        typeResponseDTO = locationService.....
         return  new APIResponseDTO();
     }
+
+    @DeleteMapping(value = "/api/delete-location/{idLocation}")
+    public APIResponseDTO deleteLocationById(@PathVariable Long idLocation){
+        locationService.deleteLocation(idLocation);
+        return new APIResponseDTO(200,"Deleted!",null);
+    }
+
+
 
 
 }

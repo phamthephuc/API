@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 
 @Service
@@ -136,6 +137,10 @@ public class PictureService {
 //	    File file = new File(classLoader.getResource("static/images/").getFile(),user.getFile().getOriginalFilename());
 //	    System.out.println(file.getAbsolutePath());
 //	    user.getFile().transferTo(file);
+    }
+
+    public List<Picture> listPictureOfLocation(Long idLocation){
+        return pictureRepository.findByIdLocation(idLocation);
     }
 
 
