@@ -65,7 +65,7 @@ public class LocationController {
 //    }
 
     @GetMapping(value = "/top-10-new-locations")
-    @PreAuthorize("hasAuthority('user')")
+//    @PreAuthorize("hasAuthority('user')")
 
     public APIResponseDTO getNewLocations(){
         return new APIResponseDTO(200,"Get All New Locations", locationService.getNewLocations());

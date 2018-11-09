@@ -6,17 +6,16 @@ import com.entity.InforUsers;
 import com.entity.Traveler;
 import com.service.InforUsersService;
 import com.service.TravelerService;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
 @RestController
 
-public class SignupController {
-
+public class RegisterAccountController {
     @Autowired
     TravelerService travelerService;
 
@@ -38,8 +37,8 @@ public class SignupController {
 //
 //    }
 
-    @PostMapping("/api/signup")
-    public APIResponseDTO signupNewAccount(@Valid  @RequestBody UserRegisterDTO userRegisterDTO){
+    @PostMapping("/api/sign-up-new-account")
+    public APIResponseDTO signupNewAccount(@RequestBody UserRegisterDTO userRegisterDTO){
         Traveler traveler = travelerService.findByEmail(userRegisterDTO.getUsername());
         if (traveler == null){
 
@@ -59,5 +58,4 @@ public class SignupController {
             return new APIResponseDTO(500, "Account same username exist!", null);
         }
     }
-
 }
