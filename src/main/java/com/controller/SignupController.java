@@ -25,7 +25,6 @@ public class SignupController {
 
 //    @PostMapping("/signup")
 //    public APIResponseDTO signup(@ApiParam("username") @RequestParam String username, @ApiParam("password") @RequestParam String password) {
-//
 //        Traveler traveler = travelerService.findByEmail(username);
 //        if (traveler==null){
 //            Traveler travelerNew = new Traveler();
