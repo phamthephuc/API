@@ -22,13 +22,13 @@ public class PlaceCategoryController {
     PlaceCategoryService placeCategoryService;
 
     @GetMapping(value = "/place-categories")
-    @PreAuthorize("hasAuthority('admin')")
+//    @PreAuthorize("hasAuthority('user')")
     public APIResponseDTO findAll(){
         return  new APIResponseDTO(200,"Success!",placeCategoryService.findAllPlaceCategory());
     }
 
     @GetMapping(value = "/place-type/{id}/place-categories")
-    @PreAuthorize("hasAuthority('user')")
+//    @PreAuthorize("hasAuthority('user')")
     public  APIResponseDTO findAllPlaceCategoryOfOneType(@PathVariable Long id){
         return  new APIResponseDTO(200,"Success", placeCategoryService.findAllPlaceCategoryOfOneType(id));
     }
