@@ -35,4 +35,10 @@ public class ReviewController {
     public APIResponseDTO getReviewPagination(@PathVariable Long idLocation, @PathVariable int crrPage){
         return new APIResponseDTO(200,"Ok", evaluationService.findAppReviewDTOPagination(idLocation,crrPage));
     }
+
+    @DeleteMapping(value ="/delete/review/{id}")
+    public APIResponseDTO deleteReview(@PathVariable Long id){
+        evaluationService.deleteEvaluation(id);
+        return new APIResponseDTO(200,  "OK", null);
+    }
 }
