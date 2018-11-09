@@ -16,7 +16,7 @@ public class LoginController {
     @Autowired
     TravelerService travelerService;
 
-    @PostMapping("/login")
+        @PostMapping("/login")
     public APIResponseDTO login(@ApiParam("username") @RequestParam String username, @ApiParam("password") @RequestParam String password) {
         return new APIResponseDTO(200, "Login success!", travelerService.login(username, password));
     }
