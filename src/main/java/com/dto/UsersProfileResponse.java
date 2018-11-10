@@ -10,4 +10,5 @@ public class UsersProfileResponse {
     String address;
     String phone;
     Long gender;
+    String fullname;
 }

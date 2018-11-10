@@ -42,6 +42,7 @@ public class UsersService {
         usersProfileResponse.setAddress(inforUsers.getAddress());
         usersProfileResponse.setGender(inforUsers.getGender());
         usersProfileResponse.setPhone(inforUsers.getPhone());
+        usersProfileResponse.setFullname(inforUsers.getFullname());
         return usersProfileResponse;
 
     }

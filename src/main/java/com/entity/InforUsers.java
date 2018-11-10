@@ -18,4 +18,5 @@ public class InforUsers {
     private String address;
     private String phone;
     private Long gender;
+    private String fullname;
 }

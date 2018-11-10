@@ -15,6 +15,8 @@ public class UserRegisterDTO {
     @Size(min=4, max=200, message = "Username have lenght between 4 and 200!")
     private String username;
 
+    private String fullname;
+
     @NotBlank(message = "Password couldn't be blank!")
     @Size(min=6, max=30, message = "Username have lenght between 4 and 200!")
     private String password;

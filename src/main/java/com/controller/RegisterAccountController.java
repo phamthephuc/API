@@ -52,6 +52,7 @@ public class RegisterAccountController {
             inforUsersNew.setGender(userRegisterDTO.getGender());
             inforUsersNew.setPhone(userRegisterDTO.getPhone());
             inforUsersNew.setIdUser(travelerAdded.getId());
+            inforUsersNew.setFullname(userRegisterDTO.getFullname());
             InforUsers inforUsersAdded = inforUsersService.save(inforUsersNew);
             return new APIResponseDTO(200,"Signup success!", travelerAdded.getUsername());
         } else {
