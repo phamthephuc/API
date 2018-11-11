@@ -4,6 +4,7 @@ import com.dto.APIResponseDTO;
 import com.entity.Favorite;
 import com.service.FavoriteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.ws.rs.PathParam;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 1800)
+
 public class FavoriteController {
 
     @Autowired

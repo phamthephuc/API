@@ -7,6 +7,7 @@ import com.entity.Traveler;
 import com.service.InforUsersService;
 import com.service.TravelerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-
+@CrossOrigin(origins = "*", maxAge = 1800)
 public class RegisterAccountController {
     @Autowired
     TravelerService travelerService;
