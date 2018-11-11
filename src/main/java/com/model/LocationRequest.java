@@ -12,8 +12,8 @@ public class LocationRequest {
     Long idPlaceCategory;
     String content;
     Long idStatus;
-    Float longitudeAddress;
-    Float latitudeAddress;
+    Double longitudeAddress;
+    Double latitudeAddress;
     String nameAddress;
     String phone;
     String email;
