@@ -285,7 +285,8 @@ public class LocationService {
 //            Address address;
         Address address = addressRepository.findById(location.getIdAddress()).orElse(new Address());
         detailLocationDTO.setAddress(address.getName());
-        detailLocationDTO.setLatLng(address.getLink());
+        detailLocationDTO.setLatitude(address.getLatitude());
+        detailLocationDTO.setLongitude(address.getLongitude());
 //            Contact contact;
         Contact contact = contactRepository.findById(location.getIdContact()).orElse(new Contact());
         detailLocationDTO.setEmail(contact.getEmail());
@@ -415,7 +416,7 @@ public class LocationService {
 
         Address address = new Address();
         address.setName(locationRequest.getNameAddress());
-        address.setLink(locationRequest.getNameAddress());
+        address.setLink(locationRequest.getLatitudeAddress() + "|" + locationRequest.getLongitudeAddress());
         address.setLongitude(locationRequest.getLongitudeAddress());
         address.setLatitude(locationRequest.getLatitudeAddress());
         addressRepository.save(address);

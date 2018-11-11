@@ -5,6 +5,7 @@ import com.entity.Picture;
 import java.math.BigDecimal;
 import java.util.List;
 
+
 public class DetailLocationDTO {
 
     Long id;
@@ -12,7 +13,8 @@ public class DetailLocationDTO {
     String introduction;
     String content;
     String address;
-    String latLng;
+    Double latitude;
+    Double longitude;
     String phone;
     String email;
 
@@ -22,12 +24,20 @@ public class DetailLocationDTO {
     long numRating;
     EvaluationPaginationDTO evaluationPaginationDTO;
 
-    public void setLatLng(String latLng) {
-        this.latLng = latLng;
+    public Double getLatitude() {
+        return latitude;
     }
 
-    public String getLatLng() {
-        return latLng;
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 
     public EvaluationPaginationDTO getEvaluationPaginationDTO() {
