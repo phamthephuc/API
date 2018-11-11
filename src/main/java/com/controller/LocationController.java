@@ -36,6 +36,8 @@ public class LocationController {
     @Autowired
     RecommendService recommendService;
 
+
+
     @GetMapping(value = "/locations/{currentPage}")
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Something went wrong"), //

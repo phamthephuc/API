@@ -22,7 +22,7 @@ import java.util.List;
 @Service
 public class LocationService {
 
-    private static final int PAGE_SIZE = 2;
+    private static final int PAGE_SIZE = 10;
 
     @Autowired
     EvaluationService evaluationService;
@@ -157,6 +157,8 @@ public class LocationService {
 //            Address address;
             Address address = addressRepository.findById(location.getIdAddress()).orElse(new Address());
             locationProfileDTO.setAddress(address.getName());
+            locationProfileDTO.setLatitude(address.getLatitude());
+            locationProfileDTO.setLongtude(address.getLongitude());
 //            Contact contact;
             Contact contact = contactRepository.findById(location.getIdContact()).orElse(new Contact());
             locationProfileDTO.setEmail(contact.getEmail());

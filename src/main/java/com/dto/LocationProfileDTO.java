@@ -17,6 +17,8 @@ public class LocationProfileDTO {
     String content;
     String  status;
     String  address;
+    Double latitude;
+    Double longtude;
     String phone;
     String email;
     String usersname;
