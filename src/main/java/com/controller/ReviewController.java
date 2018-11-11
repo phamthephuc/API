@@ -48,4 +48,6 @@ public class ReviewController {
     public APIResponseDTO getAllReviews(){
         return new APIResponseDTO(200,"Ok", evaluationService.findAllEvaluation());
     }
+
+//    @DeleteMapping(value = "/")
 }

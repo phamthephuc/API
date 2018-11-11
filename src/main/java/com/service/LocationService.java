@@ -363,7 +363,7 @@ public class LocationService {
 
         Address address = new Address();
         address.setName(locationRequest.getNameAddress());
-        address.setLink(locationRequest.getNameAddress());
+        address.setLink(locationRequest.getLatitudeAddress() + "|" + locationRequest.getLongitudeAddress());
         address.setLatitude(locationRequest.getLatitudeAddress());
         address.setLongitude(locationRequest.getLongitudeAddress());
         addressRepository.save(address);
