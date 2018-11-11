@@ -20,6 +20,8 @@ import java.nio.file.Files;
 
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 1800)
+
 public class FileController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
