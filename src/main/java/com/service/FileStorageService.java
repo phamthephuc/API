@@ -40,7 +40,7 @@ public class FileStorageService {
         }
     }
 
-    public String storeFile(MultipartFile file, Long idLocation) {
+    public Picture storeFile(MultipartFile file, Long idLocation) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
@@ -58,8 +58,8 @@ public class FileStorageService {
             picture.setName(file.getOriginalFilename());
             picture.setImage(file.getOriginalFilename());
             picture.setIdLocation(idLocation);
-            pictureRepository.save(picture);
-            return fileName;
+            Picture pictureAdded= pictureRepository.save(picture);
+            return pictureAdded;
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }

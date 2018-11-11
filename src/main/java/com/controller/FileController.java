@@ -1,6 +1,7 @@
 package com.controller;
 
 import com.dto.APIResponseDTO;
+import com.entity.Picture;
 import com.service.FileStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -32,7 +34,8 @@ public class FileController {
 
     @PostMapping("/api/upload-image-for-location")
     public APIResponseDTO uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("idLocation") Long idLocation) {
-        String fileName = fileStorageService.storeFile(file, idLocation);
+        Picture pictureAdded = fileStorageService.storeFile(file, idLocation);
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
 
 
@@ -42,7 +45,7 @@ public class FileController {
                 .toUriString();
 
         String responInfor =  fileName + " " +  fileDownloadUri + " " + file.getContentType() + " " + file.getSize();
-        return new APIResponseDTO(200,"Created!", responInfor );
+        return new APIResponseDTO(200,"Created!", pictureAdded );
     }
 
 
