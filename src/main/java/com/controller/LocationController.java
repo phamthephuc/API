@@ -36,6 +36,11 @@ public class LocationController {
     @Autowired
     RecommendService recommendService;
 
+    @GetMapping(value = "/api/location/{idLocation}")
+    public APIResponseDTO getLocationById(@PathVariable Long idLocation){
+        return new APIResponseDTO(200, "OK", locationService.getLocationRequestById(idLocation));
+    }
+
 
 
     @GetMapping(value = "/locations/{currentPage}")
@@ -149,6 +154,9 @@ public class LocationController {
         }
 
     }
+
+
+
 
     @PutMapping(value = "/location/{id}")
     public ResponseEntity<Object> editLocation(@RequestBody LocationRequest LocationRequest, @PathVariable Long id){

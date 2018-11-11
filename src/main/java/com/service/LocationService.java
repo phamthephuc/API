@@ -59,6 +59,43 @@ public class LocationService {
     @Autowired
     UsersRepository usersRepository;
 
+
+    public LocationRequest getLocationRequestById(Long idLocation){
+        Location location = locationRepository.findById(idLocation).orElse(new Location());
+        return getLocationRequestFromLocation(location);
+    }
+
+    private LocationRequest getLocationRequestFromLocation(Location location) {
+
+        LocationRequest locationRequest= new LocationRequest();
+        locationRequest.setName(location.getName());
+        locationRequest.setIntroduction(location.getIntroduction());
+//            PlaceCategory placeCategory;
+        PlaceCategory placeCategory = placeCategoryRepository.findById(location.getIdPlaceCategory()).orElse(new PlaceCategory());
+        locationRequest.setIdPlaceCategory(location.getIdPlaceCategory());
+//            Content content;
+        Content content = contentRepository.findById(location.getIdContent()).orElse(new Content());
+        locationRequest.setContent(content.getDetail());
+//            Status  status;
+        Status status = statusRepository.findById(location.getIdStatus()).orElse(new Status());
+        locationRequest.setIdStatus(location.getIdStatus());
+//            Address address;
+        Address address = addressRepository.findById(location.getIdAddress()).orElse(new Address());
+        locationRequest.setNameAddress(address.getName());
+        locationRequest.setLatitudeAddress(address.getLatitude());
+        locationRequest.setLongitudeAddress(address.getLongitude());
+//            Contact contact;
+        Contact contact = contactRepository.findById(location.getIdContact()).orElse(new Contact());
+        locationRequest.setEmail(contact.getEmail());
+        locationRequest.setPhone(contact.getPhone());
+//            Duration duration;
+        locationRequest.setIdDuration(location.getIdDuration());
+        return locationRequest;
+
+//
+
+    }
+
     public PageLocationDTO findAllLocationPagination(int currentPage) {
         PageRequest pageRequest = new PageRequest(currentPage - 1, PAGE_SIZE, Sort.Direction.DESC,"id");
         Page<Location> pageLocation = locationRepository.findAll(pageRequest);
