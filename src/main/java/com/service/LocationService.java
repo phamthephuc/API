@@ -362,8 +362,10 @@ public class LocationService {
         location.setIdContact(contactRepository.findLastestContact().getId());
 
         Address address = new Address();
-        address.setName(locationRequest.getAddress());
-        address.setLink(locationRequest.getAddress());
+        address.setName(locationRequest.getNameAddress());
+        address.setLink(locationRequest.getNameAddress());
+        address.setLatitude(locationRequest.getLatitudeAddress());
+        address.setLongitude(locationRequest.getLongitudeAddress());
         addressRepository.save(address);
         location.setIdAddress(addressRepository.findLastestAddress().getId());
 
@@ -410,8 +412,10 @@ public class LocationService {
         location.setIdContact(contactRepository.findLastestContact().getId());
 
         Address address = new Address();
-        address.setName(locationRequest.getAddress());
-        address.setLink(locationRequest.getAddress());
+        address.setName(locationRequest.getNameAddress());
+        address.setLink(locationRequest.getNameAddress());
+        address.setLongitude(locationRequest.getLongitudeAddress());
+        address.setLatitude(locationRequest.getLatitudeAddress());
         addressRepository.save(address);
         location.setIdAddress(addressRepository.findLastestAddress().getId());
 

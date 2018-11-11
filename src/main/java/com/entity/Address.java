@@ -16,6 +16,8 @@ public class Address {
     Long id;
     String name;
     String link;
+    Float longitude;
+    Float latitude;
 
     public Long getId() {
         return id;
@@ -40,4 +42,6 @@ public class Address {
     public void setLink(String link) {
         this.link = link;
     }
+
+
 }
