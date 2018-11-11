@@ -73,6 +73,7 @@ public class LocationService {
 //            PlaceCategory placeCategory;
         PlaceCategory placeCategory = placeCategoryRepository.findById(location.getIdPlaceCategory()).orElse(new PlaceCategory());
         locationRequest.setIdPlaceCategory(location.getIdPlaceCategory());
+        locationRequest.setIdPlaceType(placeCategory.getIdPlaceType());
 //            Content content;
         Content content = contentRepository.findById(location.getIdContent()).orElse(new Content());
         locationRequest.setContent(content.getDetail());
@@ -236,6 +237,8 @@ public class LocationService {
 //            Address address;
             Address address = addressRepository.findById(location.getIdAddress()).orElse(new Address());
             locationProfileDTO.setAddress(address.getName());
+            locationProfileDTO.setLongtude(address.getLongitude());
+            locationProfileDTO.setLatitude(address.getLatitude());
 //            Contact contact;
             Contact contact = contactRepository.findById(location.getIdContact()).orElse(new Contact());
             locationProfileDTO.setEmail(contact.getEmail());
