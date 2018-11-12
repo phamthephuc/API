@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 public class ReviewController {
 
-    @Autowired
-    ReviewService reviewService;
+
 
     @Autowired
     CommentService commentService;
@@ -25,7 +24,7 @@ public class ReviewController {
 
     @PostMapping(value = "/app/review-location")
     public APIResponseDTO reviewLocation(@RequestBody ReviewDTO reviewDTO){
-        return new APIResponseDTO(200, "Review Successfull!", reviewService.reviewLocation(reviewDTO));
+        return new APIResponseDTO(200, "Review Successfull!", evaluationService.reviewLocation(reviewDTO));
     }
 
     @PostMapping(value = "/app/api/list-top-comment-of-location")

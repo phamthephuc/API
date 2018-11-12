@@ -22,16 +22,7 @@ public class ReviewService {
     @Autowired
     EvaluationRepository evaluationRepository;
 
-    public ReviewDTO reviewLocation(@RequestBody ReviewDTO reviewDTO){
-        Evaluation evaluation = new Evaluation();
-        evaluation.setIdUser(reviewDTO.getUserId());
-        evaluation.setScore(reviewDTO.getNumberRating());
-        evaluation.setIdLocation(reviewDTO.getLocationId());
-        evaluation.setContent(reviewDTO.getCommentContent());
-        evaluation.setEvaluationDate(new Date());
-        Evaluation evaluationAdded = evaluationRepository.save(evaluation);
-        return null;
-    }
+
 
 
 }
