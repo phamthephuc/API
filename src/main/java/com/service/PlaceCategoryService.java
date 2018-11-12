@@ -29,6 +29,11 @@ public class PlaceCategoryService {
         return placeCategoryRepository.findByIdPlaceType(id);
     }
 
+    public CategoryResponseDTO findCategoryInfoForApp(Long id) {
+        PlaceCategory placeCategory = findById(id).orElse(new PlaceCategory());
+        List<LocationProfileForTypeDTO> listLocationProfile = locationService.getLocationProfileForOneCategory(id);
+        return new CategoryResponseDTO(placeCategory.getId(), placeCategory.getName(), listLocationProfile);
+    }
     public Optional<PlaceCategory> findById(Long id){
         return placeCategoryRepository.findById(id);
     }

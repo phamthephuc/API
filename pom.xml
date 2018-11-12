@@ -94,6 +94,7 @@
 			<version>1.1.0</version>
 		</dependency>
 
+
 		<dependency>
 			<!-- JSON Web Token Support -->
 			<groupId>io.jsonwebtoken</groupId>

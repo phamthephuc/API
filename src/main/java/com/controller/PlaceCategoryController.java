@@ -38,6 +38,11 @@ public class PlaceCategoryController {
         return  new APIResponseDTO(200,"Success!",placeCategoryService.findById(id));
     }
 
+    @GetMapping(value = "app/place-category/{id}")
+    public  APIResponseDTO getInfoPlaceCategory( @PathVariable Long id){
+        return  new APIResponseDTO(200,"Success!",placeCategoryService.findCategoryInfoForApp(id));
+    }
+
     @PostMapping(value = "/place-category")
     public APIResponseDTO  createPlaceCategory(@RequestBody PlaceCategory placeCategory){
         placeCategoryService.createPlaceCategory(placeCategory);
