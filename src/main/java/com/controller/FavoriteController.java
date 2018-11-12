@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.PathParam;
 
 @RestController
@@ -19,14 +20,10 @@ public class FavoriteController {
     @Autowired
     FavoriteService favoriteService;
 
-    @PostMapping("/app/favorite-location/{idLocation}")
-    public APIResponseDTO setFavoriteLocation(@PathVariable Long idLocation){
-        Long idUser = 1L;
-        Favorite favorite = new Favorite();
-        favorite.setIdUser(idUser);
-        favorite.setIdLocation(idLocation);
-        favoriteService.createFavorite(favorite);
-        return new APIResponseDTO(200,"OK", null);
+    @PostMapping("/api/app/favorite-location/{idLocation}")
+    public APIResponseDTO setFavoriteLocation(HttpServletRequest request, @PathVariable Long idLocation){
+        Boolean status = favoriteService.setFavorite(idLocation, request);
+        return new APIResponseDTO(200,"OK", status);
     }
 
 }
