@@ -36,6 +36,17 @@ public class ReviewController {
         return new APIResponseDTO(200, "Review Successfull!", evaluationService.reviewLocationForApp(request, reviewDTO));
     }
 
+    @PutMapping(value = "/api/app/edit-review-location")
+    public APIResponseDTO editReviewLocation(HttpServletRequest request, @RequestBody ReviewDTO reviewDTO){
+        return new APIResponseDTO(200, "Edited", evaluationService.editReviewLocation(request, reviewDTO));
+    }
+
+    //get review cua user cua 1 dia diem
+    @GetMapping("/api/app/location-review/{idLocation}")
+    public APIResponseDTO getReviewLocation(HttpServletRequest request, @PathVariable Long idLocation){
+        return new APIResponseDTO(200,"Ok", evaluationService.getReviewLocation(request,idLocation));
+    }
+
 
 
     @PostMapping(value = "/app/api/list-top-comment-of-location")
@@ -58,6 +69,7 @@ public class ReviewController {
     public APIResponseDTO getAllReviews(){
         return new APIResponseDTO(200,"Ok", evaluationService.findAllEvaluation());
     }
+
 
 //    @DeleteMapping(value = "/")
 }

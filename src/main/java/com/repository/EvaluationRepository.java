@@ -16,6 +16,8 @@ import java.util.Optional;
 public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
     public List<Evaluation> findAllByIdUser(Long idUser);
 
+    public Evaluation findEvaluationByIdUserAndIdLocation(Long idUser, Long idLocation);
+
     public void deleteByIdLocation(Long idLocation);
 
     @Query(value = "SELECT evaluation.* FROM evaluation WHERE evaluation.id_user = ?2 AND evaluation.id_location IN (SELECT evl.id_location FROM evaluation AS evl Where evl.id_user = ?1 );" , nativeQuery = true)

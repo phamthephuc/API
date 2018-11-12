@@ -128,4 +128,18 @@ public class EvaluationService {
         Evaluation evaluationAdded = evaluationRepository.save(evaluation);
         return evaluationAdded;
     }
+
+    public Evaluation editReviewLocation(HttpServletRequest request, ReviewDTO reviewDTO) {
+        Traveler travelerCurrent = travelerResponsitory.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request)));
+        Evaluation evaluation = evaluationRepository.findEvaluationByIdUserAndIdLocation(travelerCurrent.getId(), reviewDTO.getLocationId());
+        evaluation.setScore(reviewDTO.getNumberRating());
+        evaluation.setContent(reviewDTO.getCommentContent());
+        return evaluationRepository.save(evaluation);
+    }
+
+    public Evaluation getReviewLocation(HttpServletRequest request, Long idLocation) {
+        Traveler travelerCurrent = travelerResponsitory.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request)));
+        Evaluation evaluationCurrent = evaluationRepository.findEvaluationByIdUserAndIdLocation(travelerCurrent.getId(), idLocation);
+        return  evaluationCurrent;
+    }
 }
