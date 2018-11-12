@@ -129,5 +129,19 @@ public class LocationProfileDTO {
         this.pictureList = pictureList;
     }
 
+    public Double getLatitude() {
+        return latitude;
+    }
 
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongtude() {
+        return longtude;
+    }
+
+    public void setLongtude(Double longtude) {
+        this.longtude = longtude;
+    }
 }

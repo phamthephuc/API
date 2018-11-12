@@ -65,6 +65,11 @@ public class LocationService {
         return getLocationRequestFromLocation(location);
     }
 
+    public List<LocationProfileForTypeDTO> getLocationProfileForOneCategory(Long id) {
+        List<Location> listLocation = locationRepository.findByIdPlaceCategory(id);
+        return getAllLocationProfileForTypeDTOWithLocation(listLocation);
+    }
+
     private LocationRequest getLocationRequestFromLocation(Location location) {
 
         LocationRequest locationRequest= new LocationRequest();
