@@ -117,7 +117,7 @@ public class EvaluationService {
     }
 
     //user da login, ko can gui kem idUser
-    public Evaluation reviewLocation(HttpServletRequest request, ReviewDTO reviewDTO) {
+    public Evaluation reviewLocationForApp(HttpServletRequest request, ReviewDTO reviewDTO) {
         Traveler travelerCurrent = travelerResponsitory.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request)));
         Evaluation evaluation = new Evaluation();
         evaluation.setIdUser(travelerCurrent.getId());

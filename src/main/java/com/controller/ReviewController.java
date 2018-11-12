@@ -32,8 +32,8 @@ public class ReviewController {
     }
 
     @PostMapping(value = "/api/app/review-location")
-    public APIResponseDTO reviewLocation(HttpServletRequest request, @RequestBody ReviewDTO reviewDTO){
-        return new APIResponseDTO(200, "Review Successfull!", evaluationService.reviewLocation(request, reviewDTO));
+    public APIResponseDTO reviewLocationApp(HttpServletRequest request, @RequestBody ReviewDTO reviewDTO){
+        return new APIResponseDTO(200, "Review Successfull!", evaluationService.reviewLocationForApp(request, reviewDTO));
     }
 
 
