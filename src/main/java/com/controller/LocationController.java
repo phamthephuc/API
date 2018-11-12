@@ -3,8 +3,10 @@ package com.controller;
 import com.dto.APIResponseDTO;
 import com.dto.LocationProfileDTO;
 import com.dto.TypeResponseDTO;
+import com.entity.Address;
 import com.entity.Location;
 import com.model.LocationRequest;
+import com.service.AddressService;
 import com.service.LocationService;
 import com.service.PictureService;
 import com.service.RecommendService;
@@ -18,6 +20,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.activation.FileTypeMap;
+import javax.ws.rs.PUT;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -35,6 +38,9 @@ public class LocationController {
 
     @Autowired
     RecommendService recommendService;
+
+    @Autowired
+    AddressService addressService;
 
     @GetMapping(value = "/api/location/{idLocation}")
     public APIResponseDTO getLocationById(@PathVariable Long idLocation){
@@ -202,6 +208,16 @@ public class LocationController {
         locationService.deleteLocation(idLocation);
         return new APIResponseDTO(200,"Deleted!",null);
     }
+
+    //temprary
+
+    @PutMapping(value = "/api/edit-address/{idLocation}")
+    public APIResponseDTO editAddressOfLocationByLocationId(@PathVariable Long idLocation, @RequestBody Address address ){
+      Address addressEdited = addressService.editAddressOfLocation(idLocation, address);
+      return new APIResponseDTO(200,"Edited", addressEdited);
+
+    }
+
 
 
 
