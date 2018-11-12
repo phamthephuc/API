@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()//
 
 //                .antMatchers("/app/review/{idLocation}/{crrPage}").authenticated()
-                .antMatchers("/web/create-role").authenticated()
+                .antMatchers("/api/app/review-location").authenticated()
                 .anyRequest().permitAll();
 
 
