@@ -1,11 +1,15 @@
 package com.service;
 
+import com.config.JwtTokenProvider;
 import com.dto.EvaluationDTO;
 import com.dto.EvaluationPaginationDTO;
 import com.dto.ReviewDTO;
 import com.entity.Evaluation;
+import com.entity.InforUsers;
+import com.entity.Traveler;
 import com.entity.Users;
 import com.repository.EvaluationRepository;
+import com.repository.TravelerResponsitory;
 import com.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +33,12 @@ public class EvaluationService {
     public static final int PAGE_SIZE = 5;
     @Autowired
     EvaluationRepository evaluationRepository;
+
+    @Autowired
+    TravelerResponsitory travelerResponsitory;
+
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
 
     public List<Evaluation> findAllEvaluation(){
         return (List<Evaluation>) evaluationRepository.findAll();
@@ -93,6 +104,7 @@ public class EvaluationService {
         return evaluationPaginationDTO;
     }
 
+    //Gui kem userId
     public Evaluation reviewLocation(@RequestBody ReviewDTO reviewDTO){
         Evaluation evaluation = new Evaluation();
         evaluation.setIdUser(reviewDTO.getUserId());
@@ -104,5 +116,16 @@ public class EvaluationService {
         return evaluationAdded;
     }
 
-
+    //user da login, ko can gui kem idUser
+    public Evaluation reviewLocation(HttpServletRequest request, ReviewDTO reviewDTO) {
+        Traveler travelerCurrent = travelerResponsitory.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request)));
+        Evaluation evaluation = new Evaluation();
+        evaluation.setIdUser(travelerCurrent.getId());
+        evaluation.setScore(reviewDTO.getNumberRating());
+        evaluation.setIdLocation(reviewDTO.getLocationId());
+        evaluation.setContent(reviewDTO.getCommentContent());
+        evaluation.setEvaluationDate(new Date());
+        Evaluation evaluationAdded = evaluationRepository.save(evaluation);
+        return evaluationAdded;
+    }
 }

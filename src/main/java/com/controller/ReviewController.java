@@ -2,12 +2,16 @@ package com.controller;
 
 import com.dto.APIResponseDTO;
 import com.dto.ReviewDTO;
+import com.entity.InforUsers;
+import com.entity.Traveler;
 import com.repository.CommentRepository;
 import com.service.CommentService;
 import com.service.EvaluationService;
 import com.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 1800)
@@ -22,10 +26,17 @@ public class ReviewController {
     @Autowired
     EvaluationService evaluationService;
 
-    @PostMapping(value = "/app/review-location")
+    @PostMapping(value = "/api/review-location")
     public APIResponseDTO reviewLocation(@RequestBody ReviewDTO reviewDTO){
         return new APIResponseDTO(200, "Review Successfull!", evaluationService.reviewLocation(reviewDTO));
     }
+
+    @PostMapping(value = "/api/app/review-location")
+    public APIResponseDTO reviewLocation(HttpServletRequest request, @RequestBody ReviewDTO reviewDTO){
+        return new APIResponseDTO(200, "Review Successfull!", evaluationService.reviewLocation(request, reviewDTO));
+    }
+
+
 
     @PostMapping(value = "/app/api/list-top-comment-of-location")
     public APIResponseDTO getTopCommentOfLocation(@RequestParam("idLocation") Long idLocation){
