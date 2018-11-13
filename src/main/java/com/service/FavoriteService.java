@@ -56,7 +56,7 @@ public class FavoriteService {
             favoriteRepository.save(newFavorite);
             return true;
         } else {
-            favoriteRepository.deleteByIdUserAndIdLocation(travelerCurrent.getId(), idLocation);
+            favoriteRepository.delete(favorite);
             return false;
         }
     }

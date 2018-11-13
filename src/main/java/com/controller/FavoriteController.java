@@ -23,4 +23,6 @@ public class FavoriteController {
         return new APIResponseDTO(200,"OK", status);
     }
 
+
+
 }

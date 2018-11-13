@@ -1,5 +1,6 @@
 package com.service;
 
+import com.config.JwtTokenProvider;
 import com.dto.LocationDTO;
 import com.dto.LocationProfileDTO;
 import com.dto.PageLocationDTO;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,6 +60,12 @@ public class LocationService {
 
     @Autowired
     UsersRepository usersRepository;
+
+    @Autowired
+    TravelerResponsitory travelerResponsitory;
+
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
 
 
     public LocationRequest getLocationRequestById(Long idLocation){
@@ -521,13 +529,10 @@ public class LocationService {
 
     }
 
-//    public TypeResponseDTO getAllLocationByPlaceTypeId(Long id){
-//
-//        TypeResponseDTO typeResponseDTO = new TypeResponseDTO();
-//        typeResponseDTO.setId(id);
-//        typeResponseDTO.setListCategoryResponse(new ArrayList<>());
-//
-//
-//       return new TypeResponseDTO();
-//    }
+    public List<LocationProfileForTypeDTO> getLocationUserCurrentLike(HttpServletRequest request) {
+        Traveler travelerCurrent = travelerResponsitory.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request)));
+        List<Location> locations = locationRepository.getLocationUserCurrentLike(travelerCurrent.getId());
+        return getAllLocationProfileForTypeDTOWithLocation(locations);
+    }
+
 }

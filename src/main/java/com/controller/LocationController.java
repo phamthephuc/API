@@ -16,10 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.UsesSunHttpServer;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.activation.FileTypeMap;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.PUT;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -187,6 +189,11 @@ public class LocationController {
     @GetMapping(value = "/app/location/top-10-highlight")
     public APIResponseDTO getLocationOfUserEvaluation(){
         return new APIResponseDTO(200, "Success",locationService.findTop10ByRating());
+    }
+
+    @GetMapping(value = "/api/app/locations/user-like")
+    public APIResponseDTO getLocationUserCurrentLike(HttpServletRequest request){
+        return  new APIResponseDTO(200, "OK", locationService.getLocationUserCurrentLike(request));
     }
 
     @GetMapping(value = "/app/location/{id}")

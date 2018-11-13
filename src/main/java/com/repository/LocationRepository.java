@@ -44,4 +44,7 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
 
     @Query(value = "SELECT location.* from location ORDER by created_date DESC limit (10);", nativeQuery = true)
     List<Location> getNewLocations();
+
+    @Query(value = "SELECT location.* FROM location INNER JOIN favorite ON location.id = favorite.id_location WHERE favorite.id_user = ?1 ;" , nativeQuery = true)
+    public List<Location> getLocationUserCurrentLike(Long idUser);
 }
