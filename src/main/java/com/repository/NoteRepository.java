@@ -14,4 +14,5 @@ public interface NoteRepository extends CrudRepository<Note, Long> {
 
     public List<Note>  findAllByIdLocation(Long idLocation);
 
+
 }

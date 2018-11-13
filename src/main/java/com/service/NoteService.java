@@ -85,7 +85,7 @@ public class NoteService {
     }
 
 
-    public List<Note> getAllNote(HttpServletRequest request) {
+    public List<Note> getAllNoteOfUser(HttpServletRequest request) {
         Traveler travelerCurrent = travelerResponsitory.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request)));
         return noteRepository.findAllByIdUser(travelerCurrent.getId());
     }
@@ -98,5 +98,9 @@ public class NoteService {
         } else {
             return false;
         }
+    }
+
+    public List<Note> getAllNote() {
+        return (List<Note>) noteRepository.findAll();
     }
 }

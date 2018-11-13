@@ -43,8 +43,13 @@ public class NoteController {
     }
 
     @GetMapping(value = "/api/notes")
-    public APIResponseDTO getAllNotes(HttpServletRequest request){
-        return new APIResponseDTO(200,"OK", noteService.getAllNote(request));
+    public APIResponseDTO getAllNotesOfUser(HttpServletRequest request){
+        return new APIResponseDTO(200,"OK", noteService.getAllNoteOfUser(request));
+    }
+
+    @GetMapping(value = "/api/all-notes")
+    public APIResponseDTO getAllNotes(){
+        return new APIResponseDTO(200, "Ok", noteService.getAllNote());
     }
 
     @DeleteMapping(value = "/api/delete-note/{idNote}")
