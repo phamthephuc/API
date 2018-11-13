@@ -5,11 +5,9 @@ import com.dto.LocationProfileDTO;
 import com.dto.TypeResponseDTO;
 import com.entity.Address;
 import com.entity.Location;
+import com.entity.Users;
 import com.model.LocationRequest;
-import com.service.AddressService;
-import com.service.LocationService;
-import com.service.PictureService;
-import com.service.RecommendService;
+import com.service.*;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +41,9 @@ public class LocationController {
 
     @Autowired
     AddressService addressService;
+
+    @Autowired
+    UsersService usersService;
 
     @GetMapping(value = "/api/location/{idLocation}")
     public APIResponseDTO getLocationById(@PathVariable Long idLocation){
@@ -197,10 +198,15 @@ public class LocationController {
     }
 
     @GetMapping(value = "/app/location/{id}")
-    public APIResponseDTO getLocationOfUserEvaluation(@PathVariable Long id){
+    public APIResponseDTO getLocationOfUserEvaluation(HttpServletRequest request, @PathVariable Long id){
         // tim ra User ơ day
-        Long idUser = 1L;
-        return new APIResponseDTO(200, "Success",locationService.findDetailLocationById(id,idUser));
+        Users usersCurrent = usersService.findUserFromToken(request);
+        if (usersCurrent.getId() != null) {
+            return new APIResponseDTO(200, "Success",locationService.findDetailLocationById(id,usersCurrent.getId()));
+        } else {
+            Long idUser = 1L;
+            return new APIResponseDTO(200, "Success",locationService.findDetailLocationById(id,idUser));
+        }
     }
 
     @GetMapping(value = "/type-place", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

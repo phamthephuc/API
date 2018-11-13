@@ -46,4 +46,8 @@ public class UsersService {
         return usersProfileResponse;
 
     }
+
+    public Users findUserFromToken(HttpServletRequest request) {
+        return usersRepository.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request)));
+    }
 }
