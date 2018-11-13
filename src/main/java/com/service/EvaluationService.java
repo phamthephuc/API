@@ -119,22 +119,37 @@ public class EvaluationService {
     //user da login, ko can gui kem idUser
     public Evaluation reviewLocationForApp(HttpServletRequest request, ReviewDTO reviewDTO) {
         Traveler travelerCurrent = travelerResponsitory.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request)));
-        Evaluation evaluation = new Evaluation();
-        evaluation.setIdUser(travelerCurrent.getId());
-        evaluation.setScore(reviewDTO.getNumberRating());
-        evaluation.setIdLocation(reviewDTO.getLocationId());
-        evaluation.setContent(reviewDTO.getCommentContent());
-        evaluation.setEvaluationDate(new Date());
-        Evaluation evaluationAdded = evaluationRepository.save(evaluation);
-        return evaluationAdded;
+        Evaluation evaluationOld = evaluationRepository.findEvaluationByIdUserAndIdLocation(travelerCurrent.getId(), reviewDTO.getLocationId());
+        if (evaluationOld == null) {
+            Evaluation evaluation = new Evaluation();
+            evaluation.setIdUser(travelerCurrent.getId());
+            evaluation.setScore(reviewDTO.getNumberRating());
+            evaluation.setIdLocation(reviewDTO.getLocationId());
+            evaluation.setContent(reviewDTO.getCommentContent());
+            evaluation.setEvaluationDate(new Date());
+            Evaluation evaluationAdded = evaluationRepository.save(evaluation);
+            return evaluationAdded;
+        } else {
+            evaluationOld.setScore(reviewDTO.getNumberRating());
+            evaluationOld.setContent(reviewDTO.getCommentContent());
+            evaluationOld.setEvaluationDate(new Date());
+            Evaluation evaluationEdited = evaluationRepository.save(evaluationOld);
+            return  evaluationEdited;
+        }
+
     }
 
-    public Evaluation editReviewLocation(HttpServletRequest request, ReviewDTO reviewDTO) {
+    public boolean editReviewLocation(HttpServletRequest request, ReviewDTO reviewDTO) {
         Traveler travelerCurrent = travelerResponsitory.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request)));
-        Evaluation evaluation = evaluationRepository.findEvaluationByIdUserAndIdLocation(travelerCurrent.getId(), reviewDTO.getLocationId());
-        evaluation.setScore(reviewDTO.getNumberRating());
-        evaluation.setContent(reviewDTO.getCommentContent());
-        return evaluationRepository.save(evaluation);
+        Evaluation evaluationOld = evaluationRepository.findEvaluationByIdUserAndIdLocation(travelerCurrent.getId(), reviewDTO.getLocationId());
+        if (evaluationOld != null){
+            evaluationOld.setScore(reviewDTO.getNumberRating());
+            evaluationOld.setContent(reviewDTO.getCommentContent());
+            evaluationRepository.save(evaluationOld);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public Evaluation getReviewLocation(HttpServletRequest request, Long idLocation) {

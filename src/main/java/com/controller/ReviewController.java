@@ -2,6 +2,7 @@ package com.controller;
 
 import com.dto.APIResponseDTO;
 import com.dto.ReviewDTO;
+import com.entity.Evaluation;
 import com.entity.InforUsers;
 import com.entity.Traveler;
 import com.repository.CommentRepository;
@@ -38,13 +39,23 @@ public class ReviewController {
 
     @PutMapping(value = "/api/app/edit-review-location")
     public APIResponseDTO editReviewLocation(HttpServletRequest request, @RequestBody ReviewDTO reviewDTO){
-        return new APIResponseDTO(200, "Edited", evaluationService.editReviewLocation(request, reviewDTO));
+        if (evaluationService.editReviewLocation(request, reviewDTO)){
+            return new APIResponseDTO(200, "Edited", null);
+        } else {
+            return new APIResponseDTO(500, "Review isn't exist", null);
+        }
     }
 
     //get review cua user cua 1 dia diem
     @GetMapping("/api/app/location-review/{idLocation}")
     public APIResponseDTO getReviewLocation(HttpServletRequest request, @PathVariable Long idLocation){
-        return new APIResponseDTO(200,"Ok", evaluationService.getReviewLocation(request,idLocation));
+        Evaluation evaluation = evaluationService.getReviewLocation(request,idLocation);
+        if (evaluation != null){
+            return new APIResponseDTO(200,"Ok", evaluation);
+        } else {
+            return new APIResponseDTO(500,"Review isn't exist", null);
+
+        }
     }
 
 

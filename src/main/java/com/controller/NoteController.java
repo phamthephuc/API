@@ -23,11 +23,49 @@ public class NoteController {
 
     @GetMapping("/api/app/location-note/{idLocation}")
     public APIResponseDTO getNoteLocation(HttpServletRequest request, @PathVariable Long idLocation){
-        return new APIResponseDTO(200,"Ok", noteService.getNoteLocation(request,idLocation));
+        Note note = noteService.getNoteLocation(request,idLocation);
+        if (note != null){
+            return new APIResponseDTO(200,"Ok", note.getContent() );
+        } else {
+            return new APIResponseDTO(500,"Note isn't exist", null );
+        }
     }
 
     @PutMapping("/api/app/edit-note-location")
     public APIResponseDTO editNoteLocation(HttpServletRequest request, @RequestBody Note note){
-        return new APIResponseDTO(200,"OK", noteService.editNoteLocation(request,note));
+
+        if (noteService.editNoteLocation(request,note)){
+            return new APIResponseDTO(200,"Edited", null );
+        } else {
+            return  new APIResponseDTO(500, "Note isn't exist", null);
+        }
+
     }
+
+    @GetMapping(value = "/api/notes")
+    public APIResponseDTO getAllNotes(HttpServletRequest request){
+        return new APIResponseDTO(200,"OK", noteService.getAllNote(request));
+    }
+
+    @DeleteMapping(value = "/api/delete-note/{idNote}")
+    public APIResponseDTO deleteNoteById(@PathVariable Long idNote){
+        if (noteService.deleteNote(idNote)){
+            return new APIResponseDTO(200,"Deleted", null);
+        } else
+        {
+            return new APIResponseDTO(500,"Note isn't exist! ", null);
+        }
+    }
+
+    @DeleteMapping(value = "/api/delete-note-by-idLocation/{idLocation}")
+    public APIResponseDTO deleteNoteByIdLocation(@PathVariable Long idLocation){
+        if (noteService.deleteNoteByIdLocation(idLocation)){
+            return new APIResponseDTO(200,"Deleted", null);
+        } else {
+            return new APIResponseDTO(500,"Note isn't exist! ", null);
+
+        }
+    }
+
+
 }

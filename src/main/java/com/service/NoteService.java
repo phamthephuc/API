@@ -42,14 +42,26 @@ public class NoteService {
         noteRepository.save(note);
     }
 
-    public void deleteNote(Long id){
-        noteRepository.deleteById(id);
+    public boolean deleteNote(Long id){
+        Optional<Note> note = noteRepository.findById(id);
+        if (note.isPresent()){
+            noteRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public Note addNoteForLocation(Note note, HttpServletRequest request) {
         Traveler travelerCurrent = travelerResponsitory.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request)));
         note.setIdUser(travelerCurrent.getId());
-        return  noteRepository.save(note);
+        Note noteOld = noteRepository.findNoteByIdUserAndIdLocation(note.getIdUser(), note.getIdLocation());
+        if (noteOld == null){
+            return  noteRepository.save(note);
+        } else {
+            noteOld.setContent(note.getContent());
+            return noteRepository.save(noteOld);
+        }
     }
 
     public Note getNoteLocation(HttpServletRequest request,Long idLocation) {
@@ -59,10 +71,32 @@ public class NoteService {
 
     }
 
-    public Note editNoteLocation(HttpServletRequest request, Note note) {
+    public boolean editNoteLocation(HttpServletRequest request, Note note) {
         Traveler travelerCurrent = travelerResponsitory.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request)));
         Note noteOld = noteRepository.findNoteByIdUserAndIdLocation(travelerCurrent.getId(), note.getIdLocation());
-        noteOld.setContent(note.getContent());
-        return noteRepository.save(noteOld);
+        if (noteOld != null){
+            noteOld.setContent(note.getContent());
+            noteRepository.save(noteOld);
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+
+    public List<Note> getAllNote(HttpServletRequest request) {
+        Traveler travelerCurrent = travelerResponsitory.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request)));
+        return noteRepository.findAllByIdUser(travelerCurrent.getId());
+    }
+
+    public boolean deleteNoteByIdLocation(Long idLocation) {
+        List<Note> notes = noteRepository.findAllByIdLocation(idLocation);
+        if (notes != null){
+            noteRepository.deleteAll(notes);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
