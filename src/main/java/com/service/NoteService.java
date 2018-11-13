@@ -92,7 +92,7 @@ public class NoteService {
 
     public boolean deleteNoteByIdLocation(Long idLocation) {
         List<Note> notes = noteRepository.findAllByIdLocation(idLocation);
-        if (notes != null){
+        if (notes.size()!= 0){
             noteRepository.deleteAll(notes);
             return true;
         } else {
