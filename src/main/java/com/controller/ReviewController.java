@@ -67,6 +67,7 @@ public class ReviewController {
 
     @GetMapping(value = "/app/review/{idLocation}/{crrPage}")
     public APIResponseDTO getReviewPagination(@PathVariable Long idLocation, @PathVariable int crrPage){
+
         return new APIResponseDTO(200,"Ok", evaluationService.findAppReviewDTOPagination(idLocation,crrPage));
     }
 
