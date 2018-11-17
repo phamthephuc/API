@@ -84,11 +84,16 @@ public class UsersService {
             UsersProfileDTO usersProfileDTO = new UsersProfileDTO();
             usersProfileDTO.setIdUser(users.getId());
             usersProfileDTO.setUsername(users.getUsername());
+
             InforUsers inforUsers= inforUsersRepository.getInforUsersByIdUser(users.getId());
-            usersProfileDTO.setAddress(inforUsers.getAddress());
-            usersProfileDTO.setFullname(inforUsers.getFullname());
-            usersProfileDTO.setGender(inforUsers.getGender());
-            usersProfileDTO.setPhone(inforUsers.getPhone());
+
+            if (inforUsers != null){
+                usersProfileDTO.setAddress(inforUsers.getAddress());
+                usersProfileDTO.setFullname(inforUsers.getFullname());
+                usersProfileDTO.setGender(inforUsers.getGender());
+                usersProfileDTO.setPhone(inforUsers.getPhone());
+            }
+
             listUsersProfileDTOS.add(usersProfileDTO);
         }
         return listUsersProfileDTOS;
