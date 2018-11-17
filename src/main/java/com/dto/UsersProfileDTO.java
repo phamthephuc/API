@@ -7,6 +7,7 @@ import lombok.Data;
 public class UsersProfileDTO {
     Long idUser;
     String username;
+    Long status;
     String address;
     String phone;
     Long gender;

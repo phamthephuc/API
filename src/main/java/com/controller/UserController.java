@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.websocket.server.PathParam;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 1800)
@@ -32,6 +33,11 @@ public class UserController {
             @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
     public APIResponseDTO findAllUserPagination(@PathVariable int currentPage){
         return  new APIResponseDTO(200,"Success!",usersService.findAllUsersPagination(currentPage));
+    }
+
+    @PutMapping(value = "/api/web/update-status-of-user")
+    public APIResponseDTO updateStatusUser(@PathParam("idUser") Long idUser){
+        return new APIResponseDTO(200, "Edited", usersService.updateStatusOfUser(idUser));
     }
 
 }

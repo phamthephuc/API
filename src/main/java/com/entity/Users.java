@@ -15,6 +15,9 @@ public class Users {
     Long id;
     String username;
     String password;
+    Long roleId;
+    Long status;
+
 
     public Long getId() {
         return id;

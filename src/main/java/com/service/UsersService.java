@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsersService {
@@ -84,7 +85,7 @@ public class UsersService {
             UsersProfileDTO usersProfileDTO = new UsersProfileDTO();
             usersProfileDTO.setIdUser(users.getId());
             usersProfileDTO.setUsername(users.getUsername());
-
+            usersProfileDTO.setStatus(users.getStatus());
             InforUsers inforUsers= inforUsersRepository.getInforUsersByIdUser(users.getId());
 
             if (inforUsers != null){
@@ -97,5 +98,23 @@ public class UsersService {
             listUsersProfileDTOS.add(usersProfileDTO);
         }
         return listUsersProfileDTOS;
+    }
+
+    public Boolean updateStatusOfUser(Long idUser)  {
+        Users users = usersRepository.findById(idUser).orElse(new Users());
+        if (users.getId() != null){
+            if (users.getStatus() == 0){
+                users.setStatus(1L);
+                usersRepository.save(users);
+                return true;
+            } else {
+                users.setStatus(0L);
+                usersRepository.save(users);
+                return false;
+            }
+        } else {
+            throw new NullPointerException();
+        }
+
     }
 }
