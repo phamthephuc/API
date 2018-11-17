@@ -71,6 +71,12 @@ public class ReviewController {
         return new APIResponseDTO(200,"Ok", evaluationService.findAppReviewDTOPagination(idLocation,crrPage));
     }
 
+    @GetMapping(value = "/api/web/review/{idLocation}/{crrPage}")
+    public APIResponseDTO getReviewWebPagination(@PathVariable Long idLocation, @PathVariable int crrPage){
+
+        return new APIResponseDTO(200,"Ok", evaluationService.findWebReviewDTOPagination(idLocation,crrPage));
+    }
+
     @DeleteMapping(value ="/delete/review/{id}")
     public APIResponseDTO deleteReview(@PathVariable Long id){
         evaluationService.deleteEvaluation(id);

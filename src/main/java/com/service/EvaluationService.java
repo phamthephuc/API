@@ -1,9 +1,7 @@
 package com.service;
 
 import com.config.JwtTokenProvider;
-import com.dto.EvaluationDTO;
-import com.dto.EvaluationPaginationDTO;
-import com.dto.ReviewDTO;
+import com.dto.*;
 import com.entity.Evaluation;
 import com.entity.InforUsers;
 import com.entity.Traveler;
@@ -104,6 +102,37 @@ public class EvaluationService {
         return evaluationPaginationDTO;
     }
 
+    public EvaluationWebPaginationDTO findWebReviewDTOFromEvaluation(Page<Evaluation> evaluationPage) {
+        EvaluationWebPaginationDTO   evaluationWebPaginationDTO = new EvaluationWebPaginationDTO();
+        List<Evaluation> listEvaluation = evaluationPage.getContent();
+        List<EvaluationWebDTO> listEvaluationWebDTO = getListEvaluationWebDTOFromListEvaluation(listEvaluation);
+        evaluationWebPaginationDTO.setCrrPage(evaluationPage.getNumber() + 1);
+        evaluationWebPaginationDTO.setSumPage(evaluationPage.getTotalPages());
+        evaluationWebPaginationDTO.setListEvaluationWeb(listEvaluationWebDTO);
+        return evaluationWebPaginationDTO;
+    }
+
+    public List<EvaluationWebDTO> getListEvaluationWebDTOFromListEvaluation(List<Evaluation> listEvaluation) {
+        List<EvaluationWebDTO> evaluationWebDTOS = new ArrayList<>();
+        for (Evaluation evaluation : listEvaluation) {
+            EvaluationWebDTO evaluationWebDTO = getEvaluationWebDTOFromEvaluation(evaluation);
+            evaluationWebDTOS.add(evaluationWebDTO);
+        }
+        return evaluationWebDTOS;
+    }
+
+    private EvaluationWebDTO getEvaluationWebDTOFromEvaluation(Evaluation evaluation) {
+        EvaluationWebDTO evaluationWebDTO= new EvaluationWebDTO();
+        evaluationWebDTO.setId(evaluation.getId());
+        evaluationWebDTO.setContent(evaluation.getContent());
+        evaluationWebDTO.setDateReview(evaluation.getEvaluationDate());
+        evaluationWebDTO.setScore(evaluation.getScore());
+//        String username = usersRepository.findById(evaluation.getId()).get().getUsername();
+        Users usersCurrent = usersRepository.findById(evaluation.getIdUser()).orElse(new Users());
+        evaluationWebDTO.setNameUser(usersCurrent.getUsername());
+        return evaluationWebDTO;
+    }
+
     //Gui kem userId
     public Evaluation reviewLocation(@RequestBody ReviewDTO reviewDTO){
         Evaluation evaluation = new Evaluation();
@@ -156,5 +185,11 @@ public class EvaluationService {
         Traveler travelerCurrent = travelerResponsitory.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request)));
         Evaluation evaluationCurrent = evaluationRepository.findEvaluationByIdUserAndIdLocation(travelerCurrent.getId(), idLocation);
         return  evaluationCurrent;
+    }
+
+    public EvaluationWebPaginationDTO findWebReviewDTOPagination(Long idLocation, int crrPage) {
+        PageRequest pageRequest = new PageRequest(crrPage - 1, PAGE_SIZE, Sort.Direction.DESC,"id");
+        Page<Evaluation> evaluationPage = evaluationRepository.findAllByIdLocation(idLocation,pageRequest);
+        return findWebReviewDTOFromEvaluation(evaluationPage);
     }
 }
