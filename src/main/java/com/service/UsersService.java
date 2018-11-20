@@ -117,4 +117,16 @@ public class UsersService {
         }
 
     }
+
+    public InforUsers editUserProfile(HttpServletRequest request, InforUsers inforUsers) {
+        Traveler travelerCurrent = travelerResponsitory.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request)));
+        InforUsers inforUsersOld = inforUsersRepository.getInforUsersByIdUser(travelerCurrent.getId());
+        if (inforUsersOld != null){
+            inforUsersOld.setFullname(inforUsers.getFullname());
+            inforUsersOld.setPhone(inforUsers.getPhone());
+            inforUsersOld.setGender(inforUsers.getGender());
+            inforUsersOld.setAddress(inforUsers.getAddress());
+            return  inforUsersRepository.save(inforUsersOld);
+        } else throw new NullPointerException();
+    }
 }

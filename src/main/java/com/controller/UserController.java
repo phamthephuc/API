@@ -2,7 +2,9 @@ package com.controller;
 
 import com.dto.APIResponseDTO;
 import com.dto.EvaluationDTO;
+import com.dto.UsersProfileDTO;
 import com.dto.UsersProfileResponse;
+import com.entity.InforUsers;
 import com.service.UsersService;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -33,6 +35,10 @@ public class UserController {
             @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
     public APIResponseDTO findAllUserPagination(@PathVariable int currentPage){
         return  new APIResponseDTO(200,"Success!",usersService.findAllUsersPagination(currentPage));
+    }
+    @PutMapping(value = "/api/app/edit-user")
+    public APIResponseDTO editUserProfile(HttpServletRequest request, @RequestBody InforUsers inforUsers){
+        return new APIResponseDTO(200,"Edit", usersService.editUserProfile(request, inforUsers));
     }
 
     @PutMapping(value = "/api/web/update-status-of-user")
