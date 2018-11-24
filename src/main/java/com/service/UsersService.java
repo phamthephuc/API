@@ -7,6 +7,7 @@ import com.entity.InforUsers;
 import com.entity.Location;
 import com.entity.Traveler;
 import com.entity.Users;
+import com.exception.CustomException;
 import com.repository.InforUsersRepository;
 import com.repository.TravelerResponsitory;
 import com.repository.UsersRepository;
@@ -103,15 +104,20 @@ public class UsersService {
     public Boolean updateStatusOfUser(Long idUser)  {
         Users users = usersRepository.findById(idUser).orElse(new Users());
         if (users.getId() != null){
-            if (users.getStatus() == 0){
-                users.setStatus(1L);
-                usersRepository.save(users);
-                return true;
+            if (users.getStatus()!=null){
+                if (users.getStatus() == 0){
+                    users.setStatus(1L);
+                    usersRepository.save(users);
+                    return true;
+                } else {
+                    users.setStatus(0L);
+                    usersRepository.save(users);
+                    return false;
+                }
             } else {
-                users.setStatus(0L);
-                usersRepository.save(users);
-                return false;
+                throw  new CustomException(" Exception : Null Value Status", 500);
             }
+
         } else {
             throw new NullPointerException();
         }
