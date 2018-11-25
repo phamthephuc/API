@@ -9,12 +9,14 @@ import com.entity.Traveler;
 import com.entity.Users;
 import com.exception.CustomException;
 import com.repository.InforUsersRepository;
+import com.repository.RoleRespository;
 import com.repository.TravelerResponsitory;
 import com.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,6 +42,15 @@ public class UsersService {
 
     @Autowired
     RoleService roleService;
+
+    @Autowired
+    RoleRespository roleRespository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+
+
 
     public List<Users> listUserRelative(Long idUser) {
         return usersRepository.findAllUserSameLocationWithOnes(idUser);
@@ -139,5 +150,50 @@ public class UsersService {
             inforUsersOld.setAddress(inforUsers.getAddress());
             return  inforUsersRepository.save(inforUsersOld);
         } else throw new NullPointerException();
+    }
+
+    public UsersProfileDTO addMod(UserRegisterDTO userRegisterDTO) {
+        Users mod = usersRepository.findByUsername(userRegisterDTO.getUsername());
+        if (mod == null){
+
+            Users newMod= new Users();
+            newMod.setPassword(passwordEncoder.encode(userRegisterDTO.getPassword()));
+            newMod.setUsername(userRegisterDTO.getUsername());
+            newMod.setStatus(1L);
+            newMod.setRoleId(roleRespository.findByName("mod").getId());
+            Users addedMod = usersRepository.save(newMod);
+
+            InforUsers inforUsersNew = new InforUsers();
+            inforUsersNew.setAddress(userRegisterDTO.getAddress());
+            inforUsersNew.setGender(userRegisterDTO.getGender());
+            inforUsersNew.setPhone(userRegisterDTO.getPhone());
+            inforUsersNew.setIdUser(addedMod.getId());
+            inforUsersNew.setFullname(userRegisterDTO.getFullname());
+            InforUsers inforUsersAdded = inforUsersRepository.save(inforUsersNew);
+            return getUserProfileDTOfromUser(addedMod);
+        }
+
+        else {
+            throw new CustomException("Username existed!", 500);
+        }
+    }
+
+    public UsersProfileDTO getUserProfileDTOfromUser(Users users){
+
+        UsersProfileDTO usersProfileDTO = new UsersProfileDTO();
+        usersProfileDTO.setIdUser(users.getId());
+        usersProfileDTO.setUsername(users.getUsername());
+        usersProfileDTO.setStatus(users.getStatus());
+        Long roleId = users.getRoleId();
+        usersProfileDTO.setRoleName(roleService.findById(roleId).getName());
+        InforUsers inforUsers= inforUsersRepository.getInforUsersByIdUser(users.getId());
+
+        if (inforUsers != null){
+            usersProfileDTO.setAddress(inforUsers.getAddress());
+            usersProfileDTO.setFullname(inforUsers.getFullname());
+            usersProfileDTO.setGender(inforUsers.getGender());
+            usersProfileDTO.setPhone(inforUsers.getPhone());
+        }
+        return usersProfileDTO;
     }
 }

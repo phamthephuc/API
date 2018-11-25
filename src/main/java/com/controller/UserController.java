@@ -1,9 +1,6 @@
 package com.controller;
 
-import com.dto.APIResponseDTO;
-import com.dto.EvaluationDTO;
-import com.dto.UsersProfileDTO;
-import com.dto.UsersProfileResponse;
+import com.dto.*;
 import com.entity.InforUsers;
 import com.service.UsersService;
 import io.swagger.annotations.ApiResponse;
@@ -44,6 +41,11 @@ public class UserController {
     @PutMapping(value = "/api/web/update-status-of-user")
     public APIResponseDTO updateStatusUser(@PathParam("idUser") Long idUser){
         return new APIResponseDTO(200, "Edited", usersService.updateStatusOfUser(idUser));
+    }
+
+    @PostMapping(value = "/api/user")
+    public APIResponseDTO addMod(@RequestBody UserRegisterDTO userRegisterDTO){
+        return new APIResponseDTO(200,"Ok", usersService.addMod(userRegisterDTO));
     }
 
 }
