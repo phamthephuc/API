@@ -12,4 +12,6 @@ public class UsersProfileDTO {
     String phone;
     Long gender;
     String fullname;
+    String roleName;
+
 }

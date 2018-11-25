@@ -38,6 +38,8 @@ public class UsersService {
     @Autowired
     JwtTokenProvider jwtTokenProvider;
 
+    @Autowired
+    RoleService roleService;
 
     public List<Users> listUserRelative(Long idUser) {
         return usersRepository.findAllUserSameLocationWithOnes(idUser);
@@ -87,6 +89,8 @@ public class UsersService {
             usersProfileDTO.setIdUser(users.getId());
             usersProfileDTO.setUsername(users.getUsername());
             usersProfileDTO.setStatus(users.getStatus());
+            Long roleId = users.getRoleId();
+            usersProfileDTO.setRoleName(roleService.findById(roleId).getName());
             InforUsers inforUsers= inforUsersRepository.getInforUsersByIdUser(users.getId());
 
             if (inforUsers != null){
@@ -95,8 +99,9 @@ public class UsersService {
                 usersProfileDTO.setGender(inforUsers.getGender());
                 usersProfileDTO.setPhone(inforUsers.getPhone());
             }
-
-            listUsersProfileDTOS.add(usersProfileDTO);
+           if(usersProfileDTO.getRoleName()!="admin"){
+               listUsersProfileDTOS.add(usersProfileDTO);
+           }
         }
         return listUsersProfileDTOS;
     }
