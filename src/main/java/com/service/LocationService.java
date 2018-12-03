@@ -7,6 +7,7 @@ import com.dto.PageLocationDTO;
 import com.dto.TypeResponseDTO;
 import com.dto.*;
 import com.entity.*;
+import com.exception.CustomException;
 import com.model.LocationRequest;
 import com.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +68,8 @@ public class LocationService {
     @Autowired
     JwtTokenProvider jwtTokenProvider;
 
+    @Autowired
+    RoleRespository roleRespository;
 
     public LocationRequest getLocationRequestById(Long idLocation){
         Location location = locationRepository.findById(idLocation).orElse(new Location());
@@ -110,10 +113,19 @@ public class LocationService {
 
     }
 
-    public PageLocationDTO findAllLocationPagination(int currentPage) {
+    public PageLocationDTO findAllLocationPagination(HttpServletRequest request, int currentPage) {
         PageRequest pageRequest = new PageRequest(currentPage - 1, PAGE_SIZE, Sort.Direction.DESC,"id");
-        Page<Location> pageLocation = locationRepository.findAll(pageRequest);
-        return getPageLocationDTOFromPageLocation(pageLocation);
+        Users usersCurrent = usersRepository.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request)));
+        Role roleCurrent = roleRespository.findById(usersCurrent.getRoleId()).orElse(new Role());
+        if (roleCurrent !=  null){
+            if (roleCurrent.getName() == "admin"){
+                Page<Location> pageLocation = locationRepository.findAll(pageRequest);
+                return getPageLocationDTOFromPageLocation(pageLocation);
+            } else {
+                Page<Location> pageLocation = locationRepository.findAllByIdUser(usersCurrent.getId(), pageRequest);
+                return getPageLocationDTOFromPageLocation(pageLocation);
+            }
+        } else throw  new CustomException("Not be admin or Mod", 500);
     }
 
     public PageLocationDTO getPageLocationDTOFromPageLocationDTO(Page<Location> pageLocation) {
@@ -396,7 +408,9 @@ public class LocationService {
         locationRepository.save(location);
     }
 
-    public void createNewLocation(LocationRequest locationRequest){
+    public void createNewLocation(LocationRequest locationRequest, HttpServletRequest request) {
+
+        Traveler travelerCurrent = travelerResponsitory.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request)));
         Location location = new Location();
         location.setName(locationRequest.getName());
         location.setIntroduction(locationRequest.getIntroduction());
@@ -425,10 +439,9 @@ public class LocationService {
         addressRepository.save(address);
         location.setIdAddress(addressRepository.findLastestAddress().getId());
 
-        location.setIdUser((long) 1);
+
+        location.setIdUser((long) travelerCurrent.getId() );
         location.setIdDuration(locationRequest.getIdDuration());
-
-
         locationRepository.save(location);
 
     }
@@ -447,39 +460,54 @@ public class LocationService {
     }
 
     public LocationProfileDTO editLocation(LocationRequest locationRequest, Long idLocation){
-        Location location = new Location();
-        location.setName(locationRequest.getName());
-        location.setIntroduction(locationRequest.getIntroduction());
-        location.setCreatedDate(new Date());
-        location.setIdPlaceCategory(locationRequest.getIdPlaceCategory());
-        location.setIdStatus(locationRequest.getIdStatus());
+        Location locationOld = locationRepository.findById(idLocation).orElse(new Location());
+        if (locationOld !=null){
+            Location locationEdit= new Location();
+            if (locationRequest.getName()!=null){
+                locationEdit.setName(locationRequest.getName());
+            } else {
+                locationEdit.setName(locationOld.getName());
+            }
 
-        Content content = new Content();
-        content.setDetail(locationRequest.getContent());
-        contentRepository.save(content);
-        Content content1 = contentRepository.findLastestContent();
-        System.out.print(content1.getId());
-        location.setIdContent(contentRepository.findLastestContent().getId());
+            if (locationRequest.getIntroduction()!=null){
+                locationEdit.setIntroduction(locationRequest.getIntroduction());
+            } else {
+                locationEdit.setIntroduction(locationOld.getIntroduction());
+            }
+            locationEdit.setCreatedDate(new Date());
+            locationEdit.setIdPlaceCategory(locationRequest.getIdPlaceCategory());
+            locationEdit.setIdStatus(locationRequest.getIdStatus());
 
-        Contact contact = new Contact();
-        contact.setEmail(locationRequest.getEmail());
-        contact.setPhone(locationRequest.getPhone());
-        contactRepository.save(contact);
-        location.setIdContact(contactRepository.findLastestContact().getId());
+            Content content = new Content();
+            content.setDetail(locationRequest.getContent());
+            contentRepository.save(content);
+            Content content1 = contentRepository.findLastestContent();
+            System.out.print(content1.getId());
+            locationEdit.setIdContent(contentRepository.findLastestContent().getId());
 
-        Address address = new Address();
-        address.setName(locationRequest.getNameAddress());
-        address.setLink(locationRequest.getLatitudeAddress() + "|" + locationRequest.getLongitudeAddress());
-        address.setLongitude(locationRequest.getLongitudeAddress());
-        address.setLatitude(locationRequest.getLatitudeAddress());
-        addressRepository.save(address);
-        location.setIdAddress(addressRepository.findLastestAddress().getId());
+            Contact contact = new Contact();
+            contact.setEmail(locationRequest.getEmail());
+            contact.setPhone(locationRequest.getPhone());
+            contactRepository.save(contact);
+            locationEdit.setIdContact(contactRepository.findLastestContact().getId());
 
-        location.setIdUser((long) 1);
-        location.setIdDuration(locationRequest.getIdDuration());
-        location.setId(idLocation);
-        Location locationsaved = locationRepository.save(location);
-        return getLocationProfileDTOWithLocation(locationsaved);
+            Address address = new Address();
+            address.setName(locationRequest.getNameAddress());
+            address.setLink(locationRequest.getLatitudeAddress() + "|" + locationRequest.getLongitudeAddress());
+            address.setLongitude(locationRequest.getLongitudeAddress());
+            address.setLatitude(locationRequest.getLatitudeAddress());
+            addressRepository.save(address);
+            locationEdit.setIdAddress(addressRepository.findLastestAddress().getId());
+
+            locationEdit.setIdUser(locationOld.getIdUser());
+            locationEdit.setIdDuration(locationRequest.getIdDuration());
+            locationEdit.setId(idLocation);
+            Location locationsaved = locationRepository.save(locationEdit);
+            return getLocationProfileDTOWithLocation(locationsaved);
+        } else {
+            throw  new CustomException("Location isn't existed!", 500);
+        }
+
     }
 
 //    public TypeResponseDTO getAllLocationByPlaceTypeId(Long id){

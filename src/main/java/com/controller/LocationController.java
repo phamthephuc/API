@@ -52,13 +52,14 @@ public class LocationController {
 
 
 
+    @PreAuthorize("hasAuthority('admin') or  hasAuthority('mod')")
     @GetMapping(value = "/locations/{currentPage}")
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Something went wrong"), //
             @ApiResponse(code = 403, message = "Access denied"), //
             @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
-    public APIResponseDTO findAllLocationPagination(@PathVariable int currentPage){
-        return  new APIResponseDTO(200,"Success!",locationService.findAllLocationPagination(currentPage));
+    public APIResponseDTO findAllLocationPagination(HttpServletRequest request, @PathVariable int currentPage){
+        return  new APIResponseDTO(200,"Success!",locationService.findAllLocationPagination(request, currentPage));
     }
 
     @GetMapping(value = "/locations/{idCategory}/{currentPage}")
@@ -134,24 +135,17 @@ public class LocationController {
         return  new APIResponseDTO(201, "Created!",location);
     }
 
-    @PostMapping(value = "/create-location")
-    public  APIResponseDTO createNewLocation(@RequestBody LocationRequest locationRequest, @RequestParam("file") MultipartFile file) throws IOException {
-        locationService.createNewLocation(locationRequest);
-        Long idLocation = locationService.getIdLocationLastest();
-        pictureService.createPicture(file, idLocation);
-        LocationProfileDTO locationCreated = locationService.getLocationLastest();
-
-        return  new APIResponseDTO(200, "Created", locationCreated);
-    }
 
     @PostMapping(value = "/create-location-non-picture")
-    public  APIResponseDTO createNewLocation(@RequestBody LocationRequest locationRequest) throws IOException {
-        locationService.createNewLocation(locationRequest);
+    public  APIResponseDTO createNewLocation(HttpServletRequest request, @RequestBody LocationRequest locationRequest) throws IOException {
+        locationService.createNewLocation(locationRequest, request);
         LocationProfileDTO locationCreated = locationService.getLocationLastest();
 
         return  new APIResponseDTO(200, "Created", locationCreated);
     }
 
+
+    @PreAuthorize("hasAuthority('admin') or  hasAuthority('mod')")
     @PutMapping(value = "/web/update-location/{idLocation}")
     public APIResponseDTO updateLocation(@RequestBody LocationRequest locationRequest, @PathVariable Long idLocation){
 
@@ -230,9 +224,5 @@ public class LocationController {
       return new APIResponseDTO(200,"Edited", addressEdited);
 
     }
-
-
-
-
 
 }

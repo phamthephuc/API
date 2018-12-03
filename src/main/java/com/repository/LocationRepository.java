@@ -14,6 +14,9 @@ import java.util.Optional;
 
 public interface LocationRepository extends JpaRepository<Location, Long> {
 
+    Page<Location> findAllByIdUser(Long idUser, Pageable pageable);
+
+
     @Query(value = "Select * from location inner JOIN evaluation on evaluation.id_location = location.id " +
             "where evaluation.id_user = ?1", nativeQuery = true)
     public List<Location> getAllLocationByUser(Long id);

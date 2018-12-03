@@ -4,6 +4,7 @@ import com.filter.JwtTokenFilterConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -29,10 +30,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()//
 
 //                .antMatchers("/app/review/{idLocation}/{crrPage}").authenticated()
-                .antMatchers("/api/app/review-location").authenticated()
+                .antMatchers(HttpMethod.POST, "/api/app/review-location").authenticated()
+                .antMatchers(HttpMethod.GET, "/locations/{currentPage}").authenticated()
+                .antMatchers(HttpMethod.PUT, "/web/update-location/{idLocation}").authenticated()
                 .anyRequest().permitAll();
-
-
     }
 
 
