@@ -1,9 +1,13 @@
 package com.dto;
 
+import javax.swing.*;
+import java.util.List;
+
 public class APIResponseDTO {
     private int result_code;
     private String result_message;
     private Object data;
+
 
     public APIResponseDTO() {
     }
