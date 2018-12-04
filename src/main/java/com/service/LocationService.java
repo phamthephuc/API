@@ -410,39 +410,43 @@ public class LocationService {
 
     public void createNewLocation(LocationRequest locationRequest, HttpServletRequest request) {
 
-        Traveler travelerCurrent = travelerResponsitory.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request)));
-        Location location = new Location();
-        location.setName(locationRequest.getName());
-        location.setIntroduction(locationRequest.getIntroduction());
-        location.setCreatedDate(new Date());
-        location.setIdPlaceCategory(locationRequest.getIdPlaceCategory());
-        location.setIdStatus(locationRequest.getIdStatus());
+        String token = jwtTokenProvider.resolveToken(request);
+        if (token!=null){
+            Traveler travelerCurrent = travelerResponsitory.findByUsername(jwtTokenProvider.getUsername(token));
+            Location location = new Location();
+            location.setName(locationRequest.getName());
+            location.setIntroduction(locationRequest.getIntroduction());
+            location.setCreatedDate(new Date());
+            location.setIdPlaceCategory(locationRequest.getIdPlaceCategory());
+            location.setIdStatus(locationRequest.getIdStatus());
 
-        Content content = new Content();
-        content.setDetail(locationRequest.getContent());
-        contentRepository.save(content);
-        Content content1 = contentRepository.findLastestContent();
-        System.out.print(content1.getId());
-        location.setIdContent(contentRepository.findLastestContent().getId());
+            Content content = new Content();
+            content.setDetail(locationRequest.getContent());
+            contentRepository.save(content);
+            Content content1 = contentRepository.findLastestContent();
+            System.out.print(content1.getId());
+            location.setIdContent(contentRepository.findLastestContent().getId());
 
-        Contact contact = new Contact();
-        contact.setEmail(locationRequest.getEmail());
-        contact.setPhone(locationRequest.getPhone());
-        contactRepository.save(contact);
-        location.setIdContact(contactRepository.findLastestContact().getId());
+            Contact contact = new Contact();
+            contact.setEmail(locationRequest.getEmail());
+            contact.setPhone(locationRequest.getPhone());
+            contactRepository.save(contact);
+            location.setIdContact(contactRepository.findLastestContact().getId());
 
-        Address address = new Address();
-        address.setName(locationRequest.getNameAddress());
-        address.setLink(locationRequest.getLatitudeAddress() + "|" + locationRequest.getLongitudeAddress());
-        address.setLatitude(locationRequest.getLatitudeAddress());
-        address.setLongitude(locationRequest.getLongitudeAddress());
-        addressRepository.save(address);
-        location.setIdAddress(addressRepository.findLastestAddress().getId());
+            Address address = new Address();
+            address.setName(locationRequest.getNameAddress());
+            address.setLink(locationRequest.getLatitudeAddress() + "|" + locationRequest.getLongitudeAddress());
+            address.setLatitude(locationRequest.getLatitudeAddress());
+            address.setLongitude(locationRequest.getLongitudeAddress());
+            addressRepository.save(address);
+            location.setIdAddress(addressRepository.findLastestAddress().getId());
 
 
-        location.setIdUser((long) travelerCurrent.getId() );
-        location.setIdDuration(locationRequest.getIdDuration());
-        locationRepository.save(location);
+            location.setIdUser((long) travelerCurrent.getId() );
+            location.setIdDuration(locationRequest.getIdDuration());
+            locationRepository.save(location);
+        } else throw new CustomException("Access Denied", 500);
+
 
     }
 
