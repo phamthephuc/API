@@ -30,7 +30,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()//
 
 //                .antMatchers("/app/review/{idLocation}/{crrPage}").authenticated()
-                .antMatchers(HttpMethod.POST, "/api/app/review-location").authenticated()
+                .antMatchers(HttpMethod.POST, "/place-type").authenticated()
+                .antMatchers(HttpMethod.PUT, "/place-type/{id}").authenticated()
+                .antMatchers(HttpMethod.GET, "/place-types").authenticated()
+
                 .antMatchers(HttpMethod.GET, "/locations/{currentPage}").authenticated()
                 .antMatchers(HttpMethod.PUT, "/web/update-location/{idLocation}").authenticated()
                 .anyRequest().permitAll();
