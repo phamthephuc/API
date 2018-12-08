@@ -1,5 +1,6 @@
 package com.service;
 
+import com.anotherAPI.ResponseOtherApi;
 import com.config.JwtTokenProvider;
 import com.dto.*;
 import com.entity.Evaluation;
@@ -13,14 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class EvaluationService {
@@ -144,11 +145,30 @@ public class EvaluationService {
         Evaluation evaluationAdded = evaluationRepository.save(evaluation);
         return evaluationAdded;
     }
-
+    public void callApiAddEvaluationFromRecommendServer(Traveler travelerCurrent, ReviewDTO reviewDTO) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final String uri = ResponseOtherApi.urlRecommendServer + "/addEvaluation";
+                RestTemplate restTemplate = new RestTemplate();
+                HttpHeaders headers = new HttpHeaders();
+                LinkedMultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+                params.add("id_user", travelerCurrent.getId());
+                params.add("id_location", reviewDTO.getLocationId());
+                params.add("score", reviewDTO.getNumberRating());
+                headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+                headers.add("passcode", RecommendService.passcode);
+                HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity =
+                        new HttpEntity<>(params, headers);
+                ResponseEntity<ResponseOtherApi> responseEntity = restTemplate.exchange(uri, HttpMethod.POST, requestEntity, ResponseOtherApi.class);
+            }
+        }).start();
+    }
     //user da login, ko can gui kem idUser
     public Evaluation reviewLocationForApp(HttpServletRequest request, ReviewDTO reviewDTO) {
         Traveler travelerCurrent = travelerResponsitory.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request)));
         Evaluation evaluationOld = evaluationRepository.findEvaluationByIdUserAndIdLocation(travelerCurrent.getId(), reviewDTO.getLocationId());
+        callApiAddEvaluationFromRecommendServer(travelerCurrent,reviewDTO);
         if (evaluationOld == null) {
             Evaluation evaluation = new Evaluation();
             evaluation.setIdUser(travelerCurrent.getId());
@@ -166,11 +186,13 @@ public class EvaluationService {
             return  evaluationEdited;
         }
 
+
     }
 
     public boolean editReviewLocation(HttpServletRequest request, ReviewDTO reviewDTO) {
         Traveler travelerCurrent = travelerResponsitory.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request)));
         Evaluation evaluationOld = evaluationRepository.findEvaluationByIdUserAndIdLocation(travelerCurrent.getId(), reviewDTO.getLocationId());
+        callApiAddEvaluationFromRecommendServer(travelerCurrent,reviewDTO);
         if (evaluationOld != null){
             evaluationOld.setScore(reviewDTO.getNumberRating());
             evaluationOld.setContent(reviewDTO.getCommentContent());

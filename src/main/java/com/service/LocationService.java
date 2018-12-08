@@ -1,5 +1,7 @@
 package com.service;
 
+import com.anotherAPI.ResponseOtherApi;
+import com.anotherAPI.ResponseRecommend;
 import com.config.JwtTokenProvider;
 import com.dto.LocationDTO;
 import com.dto.LocationProfileDTO;
@@ -14,11 +16,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -405,7 +411,7 @@ public class LocationService {
 
 
     public  void createLocation(Location location ){
-        locationRepository.save(location);
+        Location location1 = locationRepository.save(location);
     }
 
     public void createNewLocation(LocationRequest locationRequest, HttpServletRequest request) {
@@ -419,7 +425,6 @@ public class LocationService {
             location.setCreatedDate(new Date());
             location.setIdPlaceCategory(locationRequest.getIdPlaceCategory());
             location.setIdStatus(locationRequest.getIdStatus());
-
             Content content = new Content();
             content.setDetail(locationRequest.getContent());
             contentRepository.save(content);
@@ -432,19 +437,39 @@ public class LocationService {
             contact.setPhone(locationRequest.getPhone());
             contactRepository.save(contact);
             location.setIdContact(contactRepository.findLastestContact().getId());
-
             Address address = new Address();
             address.setName(locationRequest.getNameAddress());
             address.setLink(locationRequest.getLatitudeAddress() + "|" + locationRequest.getLongitudeAddress());
             address.setLatitude(locationRequest.getLatitudeAddress());
             address.setLongitude(locationRequest.getLongitudeAddress());
+
             addressRepository.save(address);
             location.setIdAddress(addressRepository.findLastestAddress().getId());
 
 
             location.setIdUser((long) travelerCurrent.getId() );
             location.setIdDuration(locationRequest.getIdDuration());
-            locationRepository.save(location);
+            Location location1 = locationRepository.save(location);
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    final String uri = ResponseOtherApi.urlRecommendServer + "/addLocation";
+                    RestTemplate restTemplate = new RestTemplate();
+                    HttpHeaders headers = new HttpHeaders();
+                    LinkedMultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+                    params.add("id_location", location1.getId());
+
+                    headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+                    headers.add("passcode",RecommendService.passcode);
+
+                    HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity =
+                            new HttpEntity<>(params, headers);
+
+                    ResponseEntity<ResponseOtherApi> responseEntity = restTemplate.exchange(uri, HttpMethod.POST, requestEntity, ResponseOtherApi.class);
+                }
+            }).start();
+
         } else throw new CustomException("Access Denied", 500);
 
 
@@ -558,6 +583,26 @@ public class LocationService {
         contentRepository.deleteById(location.getIdContent());
         pictureRepository.deleteByIdLocation(idLocation);
         evaluationRepository.deleteByIdLocation(idLocation);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final String uri = ResponseOtherApi.urlRecommendServer + "/deleteLocation";
+                RestTemplate restTemplate = new RestTemplate();
+                HttpHeaders headers = new HttpHeaders();
+                LinkedMultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+                params.add("id_location", idLocation);
+
+                headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+                headers.add("passcode",RecommendService.passcode);
+
+                HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity =
+                        new HttpEntity<>(params, headers);
+
+                ResponseEntity<ResponseOtherApi> responseEntity = restTemplate.exchange(uri, HttpMethod.POST, requestEntity, ResponseOtherApi.class);
+                System.out.println(responseEntity.getBody().data);
+            }
+        }).start();
 
     }
 

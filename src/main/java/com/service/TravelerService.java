@@ -45,7 +45,6 @@ public class TravelerService {
     }
 
     public Traveler addTraveler(Traveler travelerNew) {
-
         travelerNew.setPassword(passwordEncoder.encode(travelerNew.getPassword()));
         travelerNew.setRoleId(roleRespository.findByName("user").getId());
         return travelerResponsitory.save(travelerNew);

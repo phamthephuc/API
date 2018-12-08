@@ -21,5 +21,27 @@ public class PageUsersDTO {
         this.usersProfileDTOList = usersProfileDTOS;
     }
 
+    public int getSumPage() {
+        return sumPage;
+    }
 
+    public void setSumPage(int sumPage) {
+        this.sumPage = sumPage;
+    }
+
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public List<UsersProfileDTO> getUsersProfileDTOList() {
+        return usersProfileDTOList;
+    }
+
+    public void setUsersProfileDTOList(List<UsersProfileDTO> usersProfileDTOList) {
+        this.usersProfileDTOList = usersProfileDTOList;
+    }
 }

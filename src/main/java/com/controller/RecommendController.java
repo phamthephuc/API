@@ -29,12 +29,14 @@ public class RecommendController {
             @ApiResponse(code = 403, message = "Access denied"), //
             @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
     public APIResponseDTO findRecommend(HttpServletRequest request){
+//        System.out.println("COME HERE");
+//        return  new APIResponseDTO(200,"Success!",recommendService.getListLocationProfileDTORecommend(5L));
         Users userCurrent = usersService.findUserFromToken(request);
+
         if (userCurrent != null){
             return  new APIResponseDTO(200,"Success!",recommendService.getListLocationProfileDTORecommend(userCurrent.getId()));
         } else {
             return  new APIResponseDTO(500,"Token wrong!",null);
-
         }
     }
 

@@ -1,6 +1,7 @@
 package com.service;
 
 
+import com.anotherAPI.ResponseOtherApi;
 import com.config.JwtTokenProvider;
 import com.dto.*;
 import com.entity.InforUsers;
@@ -16,11 +17,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -170,7 +175,28 @@ public class UsersService {
             inforUsersNew.setIdUser(addedMod.getId());
             inforUsersNew.setFullname(userRegisterDTO.getFullname());
             InforUsers inforUsersAdded = inforUsersRepository.save(inforUsersNew);
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    final String uri = ResponseOtherApi.urlRecommendServer + "/addUser";
+                    RestTemplate restTemplate = new RestTemplate();
+                    HttpHeaders headers = new HttpHeaders();
+                    LinkedMultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+                    params.add("id_user", addedMod.getId());
+
+                    headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+                    headers.add("passcode",RecommendService.passcode);
+
+                    HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity =
+                            new HttpEntity<>(params, headers);
+
+                    ResponseEntity<ResponseOtherApi> responseEntity = restTemplate.exchange(uri, HttpMethod.POST, requestEntity, ResponseOtherApi.class);
+                }
+            }).start();
+
             return getUserProfileDTOfromUser(addedMod);
+
         }
 
         else {

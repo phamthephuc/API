@@ -35,6 +35,15 @@ public class UserRegisterDTO {
         return username;
     }
 
+    public UserRegisterDTO(String username, String fullname, String password, String address,  String phone, Long gender) {
+        this.username = username;
+        this.fullname = fullname;
+        this.password = password;
+        this.address = address;
+        this.phone = phone;
+        this.gender = gender;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
