@@ -27,7 +27,6 @@ import java.util.LinkedHashMap;
 @Component
 public class JwtTokenProvider {
 
-
   @Value("${security.jwt.token.secret-key:secret-key}")
   private String secretKey;
 
@@ -73,11 +72,6 @@ public class JwtTokenProvider {
     String username = String.valueOf(((LinkedHashMap) Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("data")).get("username"));
     return username;
   }
-
-
-
-
-
 
   public String resolveToken(HttpServletRequest req) {
     String bearerToken = req.getHeader("Authorization");

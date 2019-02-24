@@ -179,7 +179,7 @@ public class UsersService {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    final String uri = ResponseOtherApi.urlRecommendServer + "/addUser";
+                    final String uri = ResponseOtherApi.urlRecommendServer + "/deleteUser";
                     RestTemplate restTemplate = new RestTemplate();
                     HttpHeaders headers = new HttpHeaders();
                     LinkedMultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
